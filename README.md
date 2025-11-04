@@ -1,6 +1,6 @@
 ## Scroll-demo (p5.js scrollytelling template)
 
-Group Members: Minkyu Kim
+Group Members: Minkyu Kim, Lance Santos
 
 A minimal scaffold for building scroll-driven p5.js visuals. Keep things simple: HTML sections in `index.html` drive the visual state exposed by `js/helpers/sections.js`.
 

@@ -3,6 +3,7 @@
 (function () {
     window.VizBar = {
         draw: function (p, manager, ai, progress) {
+
             p.push();
             var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
             var left = manager.offsetX || 20;

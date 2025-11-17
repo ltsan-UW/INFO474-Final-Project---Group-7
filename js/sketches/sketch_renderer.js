@@ -14,12 +14,30 @@
                 manager.data = data;
             }
 
-            computeLayout([]);
+            let url = 'data/basketball-data.json'
+            fetch(url)
+                .then(res => {return res.json();})
+                .then(data => {
+                    console.log(data);
+                    computeLayout(data);
+                })
+                .catch(err => {console.error('Failed to fetch JSON:', err);});
+
+
+            // // This is for loading the original csv file, then changing making it into a json obj.
+            // // It logs out the json file, just copy and paste into basketball-data.json.
+            // let url = 'data/basketball-data.csv'
+            // DataLoader.loadCSV(url).then((data) => {
+            //     const jsonStr = JSON.stringify(data);
+            //     console.log(jsonStr);
+            //     computeLayout(data);
+            // });
             return Promise.resolve(manager.data);
         },
 
         draw: function (p, manager, ai, progress) {
-            try { console.log('Renderer: delegating draw, ai=', ai); } catch (e) { }
+
+            try { /*console.log('Renderer: delegating draw, ai=', ai);*/ } catch (e) { }
 
             if (ai === 0 || ai === 1) {
                 window.VizTitle.draw(p, manager, ai, progress);

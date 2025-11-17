@@ -1,6 +1,7 @@
 ## Scroll-demo (p5.js scrollytelling template)
 
 Group Members: Minkyu Kim, Lance Santos, Diego Licea
+Dataset: https://www.kaggle.com/datasets/damirdizdarevic/nba-dataset-eda-and-ml-compatible/data
 
 A minimal scaffold for building scroll-driven p5.js visuals. Keep things simple: HTML sections in `index.html` drive the visual state exposed by `js/helpers/sections.js`.
 

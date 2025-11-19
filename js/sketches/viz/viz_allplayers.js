@@ -7,7 +7,8 @@
         currentSeason: null,
 
         preload: function(manager) {
-            this.currentSeason = "2020-21"; // will change to be determined by manager
+            let testSeasons = ["1996-97", "2015-16", "2020-21", "2021-22"];
+            this.currentSeason = testSeasons[2] // will change to be determined by manager
             this.seed = Math.random() * 10; // can be set to static
             this.seasonData = manager.data[this.currentSeason];
             this.doneLoading = true;
@@ -68,19 +69,24 @@
             p.strokeWeight(1);
             p.stroke('grey')
             p.fill('lightgrey');
-            let spacing = 20;
+            let r = 13;
+            let maxSpacing = Math.sqrt(p.PI * bigRadius * bigRadius / maxPlayers);
+            console.log(maxSpacing)
+            let spacing = maxSpacing;
             let maxCountRows = Math.floor(bigRadius * 2 / spacing) //get the max amount of rows possible with spacing
             let minSpacingY = bigRadius * 2 / maxCountRows;
             p.randomSeed(this.seed);
-            let r = 13;
             let gap = spacing - r;
+            let count = 0;
             for(let row = 0; row <= maxCountRows; row++) {
                 let y = minSpacingY / 2 + row * minSpacingY - bigRadius;
                 let maxX = Math.sqrt(bigRadius * bigRadius - y * y);
                 let maxCountCols = Math.floor(maxX * 2 / spacing);
                 let minSpacingX = (maxCountCols != 0 ? maxX * 2 / maxCountCols : 0);
                 for(let i = 0; i <= maxCountCols; i++) {
-                    p.circle(midX - maxX + (minSpacingX * i) + p.random(-gap, gap), midY + y + p.random(-gap, gap), r);
+                    if(count + 1 > maxPlayers) break;
+                    p.circle(midX - maxX + (minSpacingX * i) + p.random(-gap, gap), midY - y + p.random(-gap, gap), r);
+                    count++;
                 }
             }
         }

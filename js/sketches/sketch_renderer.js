@@ -48,7 +48,7 @@
             //MAKE SURE TO ADD ALL NEW FILES TO A <script> BLOCK IN index.html 
 
             if (ai === 0) {
-                window.VizLineGraphFull.draw(p, manager, ai, progress);
+                
 
                 return;
             }
@@ -79,6 +79,7 @@
             }
 
             if (ai === 6) {
+                window.VizLineGraphFull.draw(p, manager, ai, progress);
                 return;
             }
         }

@@ -60,7 +60,27 @@
             p.textSize(18);
             p.textFont("Tahoma");
             p.textStyle(p.BOLD);
-            p.text("NBA 2024-2025 \nInternational vs Domestic \nTop 10 players by VORP", cx - 275, cx - 350);
+            p.text("NBA " + this.top10[0].season + "\nInternational vs Domestic \nTop 10 players by VORP", cx - 275, cx - 350);
+
+            p.pop()
+
+            // Key
+            p.push()
+
+            p.fill("black");
+            p.textSize(12);
+            p.textFont("Tahoma");
+            p.textStyle(p.BOLD);
+
+            p.fill("blue");
+            p.square(cx, cx - 370, 20);
+            p.fill("purple");
+            p.square(cx, cx - 330, 20);
+
+            p.textAlign(p.LEFT, p.CENTER);
+            p.fill("black");
+            p.text("USA", cx + 25, cx - 360);
+            p.text("International", cx + 25, cx - 320);
 
             p.pop()
 

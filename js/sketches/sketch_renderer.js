@@ -39,18 +39,46 @@
 
             try { /*console.log('Renderer: delegating draw, ai=', ai);*/ } catch (e) { }
 
-            if (ai === 0 || ai === 1) {
-                window.VizTitle.draw(p, manager, ai, progress);
+            // Diego: add visualizations like this:
+            //if (ai === 0) { //
+            //    window.VizTitle.draw(p, manager, ai, progress); <-- make sure to pass in p, manager, ai, and progress
+            //    return;
+            //}
+
+            //MAKE SURE TO ADD ALL NEW FILES TO A <script> BLOCK IN index.html 
+
+            if (ai === 0) {
+                window.VizLineGraphFull.draw(p, manager, ai, progress);
+
                 return;
             }
 
-            if (ai >= 4 && ai < 7) {
-                window.VizScatter.draw(p, manager, ai, progress);
+            if (ai === 1) {
+                
                 return;
             }
 
-            if (ai === 7) {
-                window.VizBar.draw(p, manager, ai, progress);
+            if (ai === 2) {
+                
+                return;
+            }
+
+            if (ai === 3) {
+               
+                return;
+            }
+
+            if (ai === 4) {
+                
+                return;
+            }
+
+            if (ai === 5) {
+                
+                return;
+            }
+
+            if (ai === 6) {
                 return;
             }
         }

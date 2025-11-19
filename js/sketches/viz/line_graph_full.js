@@ -11,6 +11,8 @@
             p.textSize(20);
             p.text("Testing", cx, cy);
 
+            console.log(manager.data);
+
         }
     };
 })();

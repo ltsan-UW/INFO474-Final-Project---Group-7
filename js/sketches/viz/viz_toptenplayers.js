@@ -99,7 +99,7 @@
                     p.fill("black");
                     let curPlayer = this.top10[arrayCount];
                     p.text(curPlayer.name, (cx - 350) + (x * 120), (cy - 190) + (y * 150))
-                    p.text("PTS | AST | REB \n" + curPlayer.VORP + "     " + curPlayer.ast + "     " + curPlayer.reb, (cx - 350) + (x * 120), (cy - 100) + (y * 150))
+                    p.text("PTS | AST | REB \n" + curPlayer.pts + "     " + curPlayer.ast + "     " + curPlayer.reb, (cx - 350) + (x * 120), (cy - 100) + (y * 150))
                     if (curPlayer.country == "USA") {
                         p.fill("blue")
                     } else {

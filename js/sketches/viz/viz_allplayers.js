@@ -89,6 +89,9 @@
                     count++;
                 }
             }
+
+            p.noStroke();
+            p.fill('black');
         }
 
     };

@@ -32,11 +32,11 @@
             p.text('Total Players: ' + maxPlayers, manager.offsetX + 5, manager.offsetY + 55);
 
 
-            let bigRadius = manager.height * 0.4 - 2;
+            let bigRadius = manager.height * 0.46 - 2;
             // p.circle(manager.offsetX + manager.width / 2, manager.offsetY + manager.height / 2, bigRadius * 2);
 
             let midX = (manager.offsetX || 0) + (manager.width || 600) / 2;
-            let midY = (manager.offsetY || 0) + (manager.height || 520) / 2;
+            let midY = (manager.offsetY || 0) + (manager.height || 520) / 2 + 40;
             // p.line(xStart, yEnd, xStart, yStart);
             // p.line(xEnd, yEnd, xEnd, yStart);
 
@@ -47,30 +47,30 @@
             let xStart = manager.offsetX;
             let xEnd = manager.offsetX + manager.width;
 
-            let xDistance = xEnd - xStart;
-            let pixelsToMeter = xDistance / 15;
-            p.strokeWeight(2);
-            p.stroke('grey')
-            p.noFill();
-            p.line(xStart, yEnd, xEnd, yEnd);
-            // p.line(xStart, yEnd, xStart, yEnd - 10 * pixelsToMeter);
-            // p.line(xEnd, yEnd, xEnd, yEnd - 10 * pixelsToMeter);
-            p.line(xStart + pixelsToMeter * 0.9, yEnd, xStart + pixelsToMeter * 0.9, yEnd - 3.04* pixelsToMeter);
-            p.line(xEnd - pixelsToMeter * 0.9, yEnd, xEnd - pixelsToMeter * 0.9, yEnd - 3.04 * pixelsToMeter);
-            p.arc(midX, yEnd - 3.04 * pixelsToMeter, xDistance - pixelsToMeter * 0.9 * 2, 5.5 * pixelsToMeter * 2, p.PI, p.TWO_PI)
-            p.line(midX - 4.9 * pixelsToMeter / 2, yEnd, midX - 4.9 * pixelsToMeter / 2, yEnd - 4.6 * pixelsToMeter);
-            p.line(midX + 4.9 * pixelsToMeter / 2, yEnd, midX + 4.9 * pixelsToMeter / 2, yEnd - 4.6 * pixelsToMeter);
-            p.line(midX - 4.9 * pixelsToMeter / 2, yEnd - 4.6 * pixelsToMeter, midX + 4.9 * pixelsToMeter / 2, yEnd - 4.6 * pixelsToMeter);
-            p.arc(midX, yEnd - 4.6 * pixelsToMeter, 3.65 * pixelsToMeter, 1.8 * pixelsToMeter * 2, p.PI, p.TWO_PI)
-            p.stroke('lightgrey')
-            p.arc(midX, yEnd - 4.6 * pixelsToMeter, 3.65 * pixelsToMeter, 1.8 * pixelsToMeter * 2, p.TWO_PI, p.PI)
+            // let xDistance = xEnd - xStart;
+            // let pixelsToMeter = xDistance / 15;
+            // p.strokeWeight(2);
+            // p.stroke('grey')
+            // p.noFill();
+            // p.line(xStart, yEnd, xEnd, yEnd);
+            // // p.line(xStart, yEnd, xStart, yEnd - 10 * pixelsToMeter);
+            // // p.line(xEnd, yEnd, xEnd, yEnd - 10 * pixelsToMeter);
+            // p.line(xStart + pixelsToMeter * 0.9, yEnd, xStart + pixelsToMeter * 0.9, yEnd - 3.04* pixelsToMeter);
+            // p.line(xEnd - pixelsToMeter * 0.9, yEnd, xEnd - pixelsToMeter * 0.9, yEnd - 3.04 * pixelsToMeter);
+            // p.arc(midX, yEnd - 3.04 * pixelsToMeter, xDistance - pixelsToMeter * 0.9 * 2, 5.5 * pixelsToMeter * 2, p.PI, p.TWO_PI)
+            // p.line(midX - 4.9 * pixelsToMeter / 2, yEnd, midX - 4.9 * pixelsToMeter / 2, yEnd - 4.6 * pixelsToMeter);
+            // p.line(midX + 4.9 * pixelsToMeter / 2, yEnd, midX + 4.9 * pixelsToMeter / 2, yEnd - 4.6 * pixelsToMeter);
+            // p.line(midX - 4.9 * pixelsToMeter / 2, yEnd - 4.6 * pixelsToMeter, midX + 4.9 * pixelsToMeter / 2, yEnd - 4.6 * pixelsToMeter);
+            // p.arc(midX, yEnd - 4.6 * pixelsToMeter, 3.65 * pixelsToMeter, 1.8 * pixelsToMeter * 2, p.PI, p.TWO_PI)
+            // p.stroke('lightgrey')
+            // p.arc(midX, yEnd - 4.6 * pixelsToMeter, 3.65 * pixelsToMeter, 1.8 * pixelsToMeter * 2, p.TWO_PI, p.PI)
 
 
             p.strokeWeight(1);
             p.stroke('grey')
             p.fill('lightgrey');
-            let r = 13;
             let maxSpacing = Math.sqrt(p.PI * bigRadius * bigRadius / maxPlayers);
+            let r = maxSpacing * 0.7;
             console.log(maxSpacing)
             let spacing = maxSpacing;
             let maxCountRows = Math.floor(bigRadius * 2 / spacing) //get the max amount of rows possible with spacing

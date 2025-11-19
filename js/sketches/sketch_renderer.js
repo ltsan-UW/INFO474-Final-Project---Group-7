@@ -74,7 +74,7 @@
             }
 
             if (ai === 5) {
-                
+                window.VizTopTenPlayers.draw(p, manager, ai, progress);
                 return;
             }
 

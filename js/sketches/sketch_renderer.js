@@ -45,36 +45,36 @@
             //    return;
             //}
 
-            //MAKE SURE TO ADD ALL NEW FILES TO A <script> BLOCK IN index.html 
+            //MAKE SURE TO ADD ALL NEW FILES TO A <script> BLOCK IN index.html
 
-            if (ai === 0) {
-                
 
+            if (ai === 0 && manager.data.length != 0) {
+                window.VisAllPlayers.draw(p, manager, ai, progress);
                 return;
             }
 
             if (ai === 1) {
-                
+
                 return;
             }
 
             if (ai === 2) {
-                
+
                 return;
             }
 
             if (ai === 3) {
-               
+
                 return;
             }
 
             if (ai === 4) {
-                
+
                 return;
             }
 
             if (ai === 5) {
-                
+
                 return;
             }
 

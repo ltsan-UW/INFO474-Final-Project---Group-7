@@ -37,7 +37,7 @@
             this.doneLoading = true;
         },
 
-        //rgb(209, 13, 13)) <---- rgb color picker
+        //rgba(219, 219, 219, 1)) <---- rgb color picker
 
         draw: function (p, manager, ai, progress) {
             if (!this.doneLoading){
@@ -50,36 +50,75 @@
             p.fill("black");
 
             p.textSize(20);
+            p.textFont("Tahoma");
+            p.textStyle(p.BOLD);
 
-            // STEP 1. BORDERS 
+            // STEP 1. BORDERS ----------------
             p.push()
-            p.strokeCap(p.SQUARE);
+            p.strokeCap(p.ROUND);
             p.stroke(187, 187, 187);
             p.strokeWeight(2);
             p.line(cx - 320, cy-100, cx - 320, cy + 320);
             p.line(cx-320,cy + 320, cx + 260, cy + 320);
             p.pop()
 
-            //STEP 2. DEFINING "TICK" LOCATIONS
+            //STEP 2. BUILD THE GRAPH
             p.push()
-            p.strokeCap(p.SQUARE);
-            p.stroke(209, 13, 13);
             p.strokeWeight(3);
-
-            // 640 / 28
             let pos = cx-320 + 20.6;
             let base = cy+320;
-            //let previousX = 0;
-            //let previousY = 0;
+            let previousX = 0;
+            let previousY = 0;
+            let previousTickLength = 10;
+            p.textSize(8.5);
+            p.textAlign(p.CENTER, p.CENTER);
             for (let i = 0; i < this.playerCounts.length; i++) {
                 let obj = this.playerCounts[i];
-                let percentage = (420) * obj.Percentage;
-                p.line(pos, base - percentage, pos, base);
+                let percentage = 420 * (obj.Percentage/0.50);
+                p.stroke(13, 170, 209);
+                p.strokeWeight(4);
+                
+                //line logic
+                if (previousX === 0){
+                    p.line(pos, base - percentage, pos - 20.6, base);
+                } else {
+                    p.line(pos, base - percentage, previousX, previousY);
+                }
+                p.stroke(187, 187, 187)
+                p.strokeWeight(2);
+
+                //the little "ticks" showing every other season
+                if (previousTickLength === 10){
+                    p.line(pos, base - 15, pos, base);
+                    previousTickLength = 15;
+                    p.noStroke();
+                    p.text(obj.Season, pos, base + 10);
+                } else {
+                    p.line(pos, base - 10, pos, base);
+                    previousTickLength = 10;
+                }
+                previousX = pos;
+                previousY = base - percentage;
                 pos += 20.6;
             }
+
+            //lines for 25% and 50% for reference as well as text
+            p.stroke(219, 219, 219);
+            p.fill(180, 180, 180);
+            p.line(cx-320, cy + 110, cx + 260 ,cy + 110);
+            p.line(cx-320, cy-100, cx + 260, cy-100);
+            p.noStroke();
+            p.fill("black");
+            p.text("25%", cx-340, cy+110);
+            p.text("50%", cx-340, cy-100);
             p.pop();
 
+            
+            //STEP 3: SUPPORTING TEXT -----------------------
 
+            p.text("Percentage of NBA players not from the United States", cx - 320, cy - 150);
+            p.text("1996-2024", cx - 320, cy - 120);
+            
         }
     };
 })();

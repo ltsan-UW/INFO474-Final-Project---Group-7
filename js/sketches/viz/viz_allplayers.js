@@ -71,7 +71,6 @@
             p.fill('lightgrey');
             let maxSpacing = Math.sqrt(p.PI * bigRadius * bigRadius / maxPlayers);
             let r = maxSpacing * 0.7;
-            console.log(maxSpacing)
             let spacing = maxSpacing;
             let maxCountRows = Math.floor(bigRadius * 2 / spacing) //get the max amount of rows possible with spacing
             let minSpacingY = bigRadius * 2 / maxCountRows;

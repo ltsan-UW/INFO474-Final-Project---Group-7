@@ -74,12 +74,12 @@
             }
 
             if (ai === 5) {
-                window.VizLineGraphZoomed.draw(p, manager, ai, progress);
+                window.VizLineGraphFull.draw(p, manager, ai, progress);
                 return;
             }
 
             if (ai === 6) {
-                window.VizLineGraphFull.draw(p, manager, ai, progress);
+                window.VizLineGraphZoomed.draw(p, manager, ai, progress);
                 return;
             }
         }

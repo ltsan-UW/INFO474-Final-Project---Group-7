@@ -5,6 +5,7 @@
 
         doneLoading: false,
         playerCounts: [],
+        chosenYear: null,
 
         preload: function(manager){
 
@@ -65,14 +66,18 @@
             //STEP 2. BUILD THE GRAPH
             p.push()
             p.strokeWeight(3);
-            let pos = cx-320 + 20.6;
+
+            let pos = cx-320 + 193.3;
             let base = cy+320;
+
             let previousX = 0;
             let previousY = 0;
             let previousTickLength = 10;
             p.textSize(8.5);
             p.textAlign(p.CENTER, p.CENTER);
-            for (let i = 0; i < this.playerCounts.length; i++) {
+
+            let seasonIndex = 24 + 1;
+            for (let i = seasonIndex; i < this.playerCounts.length; i++) {
                 let obj = this.playerCounts[i];
                 let percentage = 420 * (obj.Percentage/0.50);
                 p.stroke(13, 170, 209);
@@ -80,7 +85,7 @@
                 
                 //line logic
                 if (previousX === 0){
-                    p.line(pos, base - percentage, pos - 20.6, base);
+                    p.line(pos, base - percentage, pos - 193.3, base);
                 } else {
                     p.line(pos, base - percentage, previousX, previousY);
                 }
@@ -96,10 +101,12 @@
                 } else {
                     p.line(pos, base - 10, pos, base);
                     previousTickLength = 10;
+                    p.noStroke();
+                    p.text(obj.Season, pos, base + 10);
                 }
                 previousX = pos;
                 previousY = base - percentage;
-                pos += 20.6;
+                pos += 193.3;
             }
 
             //lines for 25% and 50% for reference as well as text

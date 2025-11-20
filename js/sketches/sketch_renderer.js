@@ -69,12 +69,12 @@
             }
 
             if (ai === 4) {
-
+                window.VizTopTenPlayers.draw(p, manager, ai, progress);
                 return;
             }
 
             if (ai === 5) {
-                window.VizTopTenPlayers.draw(p, manager, ai, progress);
+                window.VizLineGraphZoomed.draw(p, manager, ai, progress);
                 return;
             }
 

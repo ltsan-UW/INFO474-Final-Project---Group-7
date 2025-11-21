@@ -106,12 +106,10 @@
                 let playerCircle = this.circles[circle];
                 p.circle(playerCircle.x, playerCircle.y, playerCircle.r);
                 if (p.dist(p.mouseX, p.mouseY, playerCircle.x, playerCircle.y) < (playerCircle.r / 2 + 5)) {
-                    p.fill('red')
                     this.clickedCircle = playerCircle;
-                    p.circle(playerCircle.x, playerCircle.y, playerCircle.r + 5);
-                    p.fill('lightgrey');
                 }
             }
+
 
 
             p.fill('white');
@@ -119,17 +117,24 @@
             // p.line(manager.offsetX + manager.width, manager.offsetY, manager.offsetX + manager.width, manager.offsetY + manager.height);
             // p.line(manager.offsetX, manager.offsetY + manager.height, manager.offsetX, manager.offsetY);
 
+            p.fill('black');
+            p.textAlign(p.CENTER, p.CENTER);
             if(this.clickedCircle != null) {
+                p.fill('red')
+                p.circle(this.clickedCircle.x, this.clickedCircle.y, this.clickedCircle.r + 5);
                 p.fill('black');
                 p.noStroke();
-                p.textAlign(p.CENTER, p.CENTER);
-                p.text(this.clickedCircle.name, manager.offsetX + manager.width - 125 - 5, manager.offsetY + 40)
-                p.textAlign(p.LEFT, p.BASELINE);
+                p.text(this.clickedCircle.name, manager.offsetX + manager.width - 125 - 5, manager.offsetY + 40);
                 if (p.dist(p.mouseX, p.mouseY, this.clickedCircle.x, this.clickedCircle.y) > (this.clickedCircle.r / 2 + 5)) {
                     this.clickedCircle = null;
                 }
-            }
+            } else {
+                p.noStroke();
+                p.fill('grey');
+                p.text("Hover over a player", manager.offsetX + manager.width - 125 - 5, manager.offsetY + 40);
 
+            }
+            p.textAlign(p.LEFT, p.BASELINE);
 
             // let bigRadius = manager.height * 0.46 - 2;
             // let maxSpacing = Math.sqrt(p.PI * bigRadius * bigRadius / this.maxPlayers);

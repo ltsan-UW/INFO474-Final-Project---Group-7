@@ -8,7 +8,7 @@
 
         preload: function(manager){
 
-            let season2020 = manager.data["2020-21"]; // 2020 Season is placeholder for data visualization
+            let season2020 = manager.data["2023-24"]; // 2023 Season is placeholder for data visualization
 
             // Pushes all of the players into playerArray in preparation for sorting
             let playerArray = [];
@@ -93,12 +93,16 @@
             p.textStyle(p.BOLD);
             p.textAlign(p.CENTER);
 
+            let mx = p.mouseX;
+            let my = p.mouseY;
             let arrayCount = 0;
             for (y = 1; y <= 2; y++) {
                 for (x = 1; x <= 5; x++) {
                     p.fill("black");
                     let curPlayer = this.top10[arrayCount];
-                    p.text(curPlayer.name, (cx - 350) + (x * 120), (cy - 190) + (y * 150))
+                    p.textWrap(p.WORD);
+                    p.textAlign(p.CENTER, p.BOTTOM);
+                    p.text(curPlayer.name, (cx - 400) + (x * 120), (cy - 220) + (y * 150), 100, 30)
                     
                     p.stroke("black");
                     p.fill("white");
@@ -122,6 +126,30 @@
                         p.fill("purple")
                     }
                     p.circle((cx - 350) + (x * 120), (cy - 150) + (y * 150), 50 + (curPlayer.VORP * 2));
+
+                    let circleX = (cx - 350) + (x * 120);
+                    let circleY = (cy - 150) + (y * 150);
+                    let diameter = 50 + (curPlayer.VORP * 2);
+
+                    let d = p.dist(mx, my, circleX, circleY);
+                    if (d <= diameter / 2) {
+                        // tooltip
+                        p.push();
+                        p.stroke(0);
+                        p.fill(255);
+                        let w = 180;
+                        let h = 60;
+                        // position tooltip so it doesn't overlap mouse exactly
+                        let tx = mx + 12;
+                        let ty = my - h / 2;
+                        p.rect(tx, ty, w, h, 6);
+                        p.noStroke();
+                        p.fill(0);
+                        p.textAlign(p.LEFT, p.TOP);
+                        p.textSize(12);
+                        p.text(curPlayer.name + "\nVORP: " + curPlayer.VORP + "\nPTS: " + curPlayer.pts + "  AST: " + curPlayer.ast + "  REB: " + curPlayer.reb, tx + 6, ty + 6);
+                        p.pop();
+                    }
                     
                     arrayCount++;
                 }

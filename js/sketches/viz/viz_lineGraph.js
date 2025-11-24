@@ -1,7 +1,7 @@
 // viz_title.js
 // Draw title-style screens for early active indexes (0 and 1)
 (function () {
-    window.VizLineGraphFull = {
+    window.VizLineGraph = {
 
         doneLoading: false,
         playerCounts: [],
@@ -41,7 +41,7 @@
 
         draw: function (p, manager, ai, progress) {
             if (!this.doneLoading){
-                VizLineGraphFull.preload(manager);
+                VizLineGraph.preload(manager);
             }
 
             var cx = (manager.offsetX || 0) + (manager.width || 600) / 2;

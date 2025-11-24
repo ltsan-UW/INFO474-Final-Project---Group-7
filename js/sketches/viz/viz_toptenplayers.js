@@ -75,12 +75,12 @@
             p.fill("blue");
             p.square(cx, cx - 370, 20);
             p.fill("purple");
-            p.square(cx, cx - 330, 20);
+            p.square(cx, cx - 340, 20);
 
             p.textAlign(p.LEFT, p.CENTER);
             p.fill("black");
             p.text("USA", cx + 25, cx - 360);
-            p.text("International", cx + 25, cx - 320);
+            p.text("International", cx + 25, cx - 330);
 
             p.pop()
 
@@ -99,13 +99,30 @@
                     p.fill("black");
                     let curPlayer = this.top10[arrayCount];
                     p.text(curPlayer.name, (cx - 350) + (x * 120), (cy - 190) + (y * 150))
-                    p.text("PTS | AST | REB \n" + curPlayer.pts + "     " + curPlayer.ast + "     " + curPlayer.reb, (cx - 350) + (x * 120), (cy - 100) + (y * 150))
+                    
+                    p.stroke("black");
+                    p.fill("white");
+                    p.rectMode(p.CENTER);
+                    p.rect((cx - 350) + (x * 120), (cy - 95) + (y * 150), 90, 35, 2);
+                    p.rect((cx - 350) + (x * 120), (cy - 95) + (y * 150), 25, 35, 2);
+                    p.rectMode(p.CORNER);
+
+                    p.stroke("white");
+                    p.fill("black");
+                    p.text("PTS", (cx - 380) + (x * 120), (cy - 100) + (y * 150))
+                    p.text("AST", (cx - 350) + (x * 120), (cy - 100) + (y * 150))
+                    p.text("REB", (cx - 320) + (x * 120), (cy - 100) + (y * 150))
+                    p.text(curPlayer.pts, (cx - 380) + (x * 120), (cy - 85) + (y * 150))
+                    p.text(curPlayer.ast, (cx - 350) + (x * 120), (cy - 85) + (y * 150))
+                    p.text(curPlayer.reb, (cx - 320) + (x * 120), (cy - 85) + (y * 150))
+
                     if (curPlayer.country == "USA") {
                         p.fill("blue")
                     } else {
                         p.fill("purple")
                     }
                     p.circle((cx - 350) + (x * 120), (cy - 150) + (y * 150), 50 + (curPlayer.VORP * 2));
+                    
                     arrayCount++;
                 }
             }

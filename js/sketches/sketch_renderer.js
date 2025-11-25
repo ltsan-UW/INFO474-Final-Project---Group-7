@@ -49,12 +49,12 @@
 
 
             if (ai === 0 && manager.data.length != 0) {
-                window.VisAllPlayers.draw(p, manager, ai, progress);
+                window.VizAllPlayers.draw(p, manager, ai, progress);
                 return;
             }
 
-            if (ai === 1) {
-
+            if (ai === 1 && manager.data.length != 0) {
+                window.VizPlayersSplit.draw(p, manager, ai, progress);
                 return;
             }
 

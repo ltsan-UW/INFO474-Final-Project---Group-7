@@ -1,10 +1,9 @@
 (function () {
 
-    window.VisAllPlayers = {
+    window.VizAllPlayers = {
         doneLoading: false,
         maxPlayers: 0,
         currentSeason: null,
-        circles: null,
         mouseClick: false,
         clickedCircle: null,
 
@@ -12,17 +11,37 @@
             let testSeasons = ["1996-97", "2015-16", "2020-21", "2021-22"];
             this.currentSeason = testSeasons[2] // will change to be determined by manager
             let seasonData = manager.data[this.currentSeason];
-            this.doneLoading = true;
-            let playerNames = Object.keys(seasonData);
             this.maxPlayers = Object.keys(seasonData).length;
-            this.circles = {}
-            let bigRadius = manager.height * 0.46 - 2;
             let midX = (manager.offsetX || 0) + (manager.width || 600) / 2;
             let midY = (manager.offsetY || 0) + (manager.height || 520) / 2 + 40;
 
-            let maxSpacing = Math.sqrt(Math.PI * bigRadius * bigRadius / this.maxPlayers);
-            let r = maxSpacing * 0.7;
-            let spacing = maxSpacing;
+
+            let newCircles = this.createCirclesAP(midX, midY, seasonData)
+            manager.setCirclesAP(newCircles);
+
+            // // Click function. Written with AI, I didn't wanna mess with using a onClick function and going through the instance stuff
+            // document.querySelector('canvas').addEventListener('click', (e) => {
+            //     this.mouseClick = !this.mouseClick;
+            // });
+
+            this.doneLoading = true;
+        },
+
+        createCirclesAP: function(centerX, centerY, seasonData) {
+            let playerNames = Object.keys(seasonData);
+            let maxPlayers = playerNames.length;
+            let circles = {}
+
+            // This formula commented out uses a constant bigRadius circle size to define the size of the circles
+            //let bigRadius = manager.height * 0.46 - 2;
+            //let maxSpacing = Math.sqrt(Math.PI * bigRadius * bigRadius / maxPlayers);
+            //let r = maxSpacing * 0.7;
+
+            // This formula uses a constant radius and spacing player circle size to define the size of the big circle
+            let r = 11;
+            let spacing = 15;
+            let minBigRadius = Math.sqrt(maxPlayers * spacing * spacing / Math.PI);
+            let bigRadius = minBigRadius;
             let maxCountRows = Math.floor(bigRadius * 2 / spacing) //get the max amount of rows possible with spacing
             let minSpacingY = bigRadius * 2 / maxCountRows;
             let gap = spacing - r;
@@ -33,27 +52,25 @@
                 let maxCountCols = Math.floor(maxX * 2 / spacing);
                 let minSpacingX = (maxCountCols != 0 ? maxX * 2 / maxCountCols : 0);
                 for(let i = 0; i <= maxCountCols; i++) {
-                    if(count + 1 > this.maxPlayers) break;
-                    this.circles[playerNames[count]] = {
-                        x: midX - maxX + (minSpacingX * i) + (Math.random() * gap * 2 - gap),
-                        y: midY - y + (Math.random() * gap * 2 - gap),
+                    if(count + 1 > maxPlayers) break;
+                    circles[playerNames[count]] = {
+                        x: centerX - maxX + (minSpacingX * i) + (Math.random() * gap * 2 - gap),
+                        y: centerY - y + (Math.random() * gap * 2 - gap),
                         r: r,
                         VORP: seasonData[playerNames[count]].VORP,
-                        name: seasonData[playerNames[count]].name
+                        name: seasonData[playerNames[count]].name,
+                        international: (seasonData[playerNames[count]].country !== 'USA'),
+                        country: seasonData[playerNames[count]].country
                     };
                     count++;
                 }
             }
-
-            //written with AI, I didn't wanna mess with using a onClick function and going through the instance stuff
-            document.querySelector('canvas').addEventListener('click', (e) => {
-                this.mouseClick = !this.mouseClick;
-            });
+            return circles;
         },
 
         draw: function (p, manager, ai, progress) {
             if(!this.doneLoading) {
-                VisAllPlayers.preload(manager);
+                this.preload(manager);
             }
 
             p.noStroke();
@@ -102,8 +119,8 @@
             p.stroke('grey')
             p.fill('lightgrey');
 
-            for(let circle in this.circles) {
-                let playerCircle = this.circles[circle];
+            for(let circle in manager.circlesAP) {
+                let playerCircle = manager.circlesAP[circle];
                 p.circle(playerCircle.x, playerCircle.y, playerCircle.r);
                 if (p.dist(p.mouseX, p.mouseY, playerCircle.x, playerCircle.y) < (playerCircle.r / 2 + 5)) {
                     this.clickedCircle = playerCircle;

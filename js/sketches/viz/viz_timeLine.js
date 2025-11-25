@@ -54,7 +54,7 @@
 
             ];
 
-            p.textSize(11);
+            
 
             events.forEach((ev, i) => {
                 // map year to position
@@ -71,6 +71,7 @@
                 // draw annotation (alternate above/below line)
                 let labelY = (cy + 100) + (i % 2 === 0 ? -140 : 140);
                 p.fill(0);
+                p.textSize(12);
                 p.text(ev.label, x, labelY);
 
                 // optional line connecting marker to text
@@ -79,6 +80,10 @@
                 p.strokeCap(p.SQUARE);
                 p.strokeWeight(2.5);
                 p.line(x, y, x, labelY - (i % 2 === 0 ? -30 : 30));
+                p.noStroke();
+                p.textSize(20);
+                p.text(ev.year, x + (i % 2 === 0 ? 30 : -30), labelY - (i % 2 === 0 ? -70 : 70))
+                
             });
 
             p.pop();

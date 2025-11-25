@@ -117,7 +117,7 @@
             //STEP 3: SUPPORTING TEXT -----------------------
 
             p.text("Percentage of NBA players not from the United States", cx - 320, cy - 150);
-            p.text("1996-2024", cx - 320, cy - 120);
+            p.text("since the 1996-1997 Season to the 2023-2024 Season", cx - 320, cy - 120);
             
         }
     };

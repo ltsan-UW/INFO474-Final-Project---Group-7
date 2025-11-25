@@ -69,12 +69,13 @@
             }
 
             if (ai === 4) {
-                window.VizLineGraphFull.draw(p, manager, ai, progress);
+                window.VizLineGraph.draw(p, manager, ai, progress);
                 return;
             }
 
             if (ai === 5) {
-                window.VizLineGraphZoomed.draw(p, manager, ai, progress);
+                //window.VizLineGraphZoomed.draw(p, manager, ai, progress);
+                window.VizTimeline.draw(p, manager, ai, progress);
                 return;
             }
         }

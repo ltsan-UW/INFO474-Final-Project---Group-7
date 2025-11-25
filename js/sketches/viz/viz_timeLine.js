@@ -15,7 +15,7 @@
             p.background(255);
             p.fill("black");
             p.textAlign(p.CENTER, p.CENTER);
-            p.textFont("Tahoma");
+            p.textFont("Tahoma, Segoe UI Emoji, Apple Color Emoji, Noto Color Emoji, sans-serif");
             
 
             // timeline start/end

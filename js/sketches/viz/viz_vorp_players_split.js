@@ -119,8 +119,10 @@
 
             let r = 11;
             let spacing = 15;
-            let intValues = createCluster(midX / 2, midY, r, spacing, intPrevCircles, minVORP, maxVORP, p, Math.sqrt(intTotalVORP / 2 / Math.PI));
-            let usaValues = createCluster(midX / 4 * 5.5, midY, r, spacing, usaPrevCircles, minVORP, maxVORP, p, Math.sqrt(usaTotalVORP / 2 / Math.PI));
+            // let intValues = createCluster(midX / 2, midY, r, spacing, intPrevCircles, minVORP, maxVORP, p, Math.sqrt(intTotalVORP / 2 / Math.PI));
+            // let usaValues = createCluster(midX / 4 * 5.5, midY, r, spacing, usaPrevCircles, minVORP, maxVORP, p, Math.sqrt(usaTotalVORP / 2 / Math.PI));
+            let intValues = createCluster(midX / 2, midY + 20, r, spacing, intPrevCircles, minVORP, maxVORP, p, Math.sqrt(intTotalVORP / 2 / Math.PI));
+            let usaValues = createCluster(midX / 4 * 5.5, midY + Math.sqrt(intTotalVORP / 2 / Math.PI) - Math.sqrt(usaTotalVORP / 2 / Math.PI) + 30, r, spacing, usaPrevCircles, minVORP, maxVORP, p, Math.sqrt(usaTotalVORP / 2 / Math.PI));
             this.circlesVorpPS = {int: intValues, usa: usaValues};
 
             this.doneLoading = true;

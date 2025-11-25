@@ -21,6 +21,9 @@ function startP5() {
         // data will be attached by localRenderer.setData(manager, data)
         this.data = [];
 
+        // circle objects for all players
+        this.circlesAP = {};
+
         // create the p5 instance bound to this manager
         var self = this;
         var sketch = function (p) {
@@ -40,6 +43,11 @@ function startP5() {
 
         this.p5 = new p5(sketch);
     }
+
+    // set circles state (called by begininng all players viz)
+    SketchManager.prototype.setCirclesAP = function (circles) {
+        if (circles !== undefined) this.circlesAP = circles;
+    };
 
 
     // set visualization state (called by scroll logic)

@@ -23,6 +23,8 @@ function startP5() {
 
         // circle objects for all players
         this.circlesAP = {};
+        // circle objects for players split between international and domestic
+        this.circlesPS = {};
 
         // create the p5 instance bound to this manager
         var self = this;
@@ -44,9 +46,13 @@ function startP5() {
         this.p5 = new p5(sketch);
     }
 
-    // set circles state (called by begininng all players viz)
+    // set circlesAP state (called by begininng all players viz)
     SketchManager.prototype.setCirclesAP = function (circles) {
         if (circles !== undefined) this.circlesAP = circles;
+    };
+    // set circlesPS state (called by begininng all players viz)
+    SketchManager.prototype.setCirclesPS = function (circles) {
+        if (circles !== undefined) this.circlesPS = circles;
     };
 
 

@@ -11,12 +11,14 @@
             let testSeasons = ["1996-97", "2015-16", "2020-21", "2021-22"];
             this.currentSeason = testSeasons[2] // will change to be determined by manager
             let seasonData = manager.data[this.currentSeason];
+
+
             this.maxPlayers = Object.keys(seasonData).length;
             let midX = (manager.offsetX || 0) + (manager.width || 600) / 2;
             let midY = (manager.offsetY || 0) + (manager.height || 520) / 2 + 40;
 
 
-            let newCircles = this.createCirclesAP(midX, midY, seasonData)
+            let newCircles = this.createCirclesAP(midX, midY, seasonData, 11, 15)
             manager.setCirclesAP(newCircles);
 
             // // Click function. Written with AI, I didn't wanna mess with using a onClick function and going through the instance stuff
@@ -27,9 +29,15 @@
             this.doneLoading = true;
         },
 
-        createCirclesAP: function(centerX, centerY, seasonData) {
-            let playerNames = Object.keys(seasonData);
-            let maxPlayers = playerNames.length;
+        createCirclesAP: function(centerX, centerY, seasonData, r, spacing) {
+
+            // Convert seasonData object to a sorted array by VORP (descending)
+            let sortedPlayers = Object.entries(seasonData)
+                .sort((a, b) => b[1].VORP - a[1].VORP)  // sort descending by VORP
+                .map(([name, stats]) => ({ name, ...stats })); // include player name in object
+
+
+            let maxPlayers = sortedPlayers.length;
             let circles = {}
 
             // This formula commented out uses a constant bigRadius circle size to define the size of the circles
@@ -38,8 +46,6 @@
             //let r = maxSpacing * 0.7;
 
             // This formula uses a constant radius and spacing player circle size to define the size of the big circle
-            let r = 11;
-            let spacing = 15;
             let minBigRadius = Math.sqrt(maxPlayers * spacing * spacing / Math.PI);
             let bigRadius = minBigRadius;
             let maxCountRows = Math.floor(bigRadius * 2 / spacing) //get the max amount of rows possible with spacing
@@ -53,14 +59,14 @@
                 let minSpacingX = (maxCountCols != 0 ? maxX * 2 / maxCountCols : 0);
                 for(let i = 0; i <= maxCountCols; i++) {
                     if(count + 1 > maxPlayers) break;
-                    circles[playerNames[count]] = {
+                    circles[sortedPlayers[count].name] = {
                         x: centerX - maxX + (minSpacingX * i) + (Math.random() * gap * 2 - gap),
                         y: centerY - y + (Math.random() * gap * 2 - gap),
                         r: r,
-                        VORP: seasonData[playerNames[count]].VORP,
-                        name: seasonData[playerNames[count]].name,
-                        international: (seasonData[playerNames[count]].country !== 'USA'),
-                        country: seasonData[playerNames[count]].country
+                        VORP: sortedPlayers[count].VORP,
+                        name: sortedPlayers[count].name,
+                        international: (sortedPlayers[count].country !== 'USA'),
+                        country: sortedPlayers[count].country
                     };
                     count++;
                 }

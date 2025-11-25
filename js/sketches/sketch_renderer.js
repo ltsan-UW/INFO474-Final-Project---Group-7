@@ -58,8 +58,8 @@
                 return;
             }
 
-            if (ai === 2) {
-
+            if (ai === 2 && manager.data.length != 0) {
+                window.VizVorpPlayersSplit.draw(p, manager, ai, progress);
                 return;
             }
 

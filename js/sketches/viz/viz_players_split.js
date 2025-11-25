@@ -4,12 +4,32 @@
         doneLoading: false,
         maxPlayers: 0,
         currentSeason: null,
-        intCircles: null,
-        usaCircles: null,
         mouseClick: false,
         clickedCircle: null,
 
         preload: function(manager) {
+
+            let testSeasons = ["1996-97", "2015-16", "2020-21", "2021-22"];
+            this.currentSeason = testSeasons[2] // will change to be determined by manager
+            let seasonData = manager.data[this.currentSeason];
+            this.maxPlayers = Object.keys(seasonData).length;
+            let midX = (manager.offsetX || 0) + (manager.width || 600) / 2;
+            let midY = (manager.offsetY || 0) + (manager.height || 520) / 2 + 40;
+
+            // load all players circles data from viz 1 if null
+            if(!manager.circlesAP || Object.keys(manager.circlesAP).length === 0) {
+
+                let newCircles = VizAllPlayers.createCirclesAP(midX, midY, seasonData, 11, 15)
+                manager.setCirclesAP(newCircles);
+            }
+
+            let newCircles = this.createPlayersSplitClusters(midX, midY, manager.circlesAP, 11, 15)
+            manager.setCirclesPS(newCircles);
+
+            this.doneLoading = true;
+        },
+
+        createPlayersSplitClusters: function(centerX, centerY, circlesAP, r, spacing) {
 
             function createCluster(centerX, centerY, r, spacing, prevCircles) {
                 let newCircles = {};
@@ -39,38 +59,17 @@
                         count++;
                     }
                 }
-                return [newCircles, bigRadius];
+                return newCircles;
             }
 
-            let testSeasons = ["1996-97", "2015-16", "2020-21", "2021-22"];
-            this.currentSeason = testSeasons[2] // will change to be determined by manager
-
-            // load all players circles data from viz 1 if null
-            if(!manager.circlesAP || Object.keys(manager.circlesAP).length === 0) {
-                let seasonData = manager.data[this.currentSeason];
-                this.maxPlayers = Object.keys(seasonData).length;
-                let midX = (manager.offsetX || 0) + (manager.width || 600) / 2;
-                let midY = (manager.offsetY || 0) + (manager.height || 520) / 2 + 40;
-
-                let newCircles = VizAllPlayers.createCirclesAP(midX, midY, seasonData)
-                manager.setCirclesAP(newCircles);
-            }
-
-            const circlesArray = Object.values(manager.circlesAP);
-            this.maxPlayers = circlesArray.length;
+            const circlesArray = Object.values(circlesAP);
             const intPrevCircles = circlesArray.filter(player => player.international);
             const usaPrevCircles = circlesArray.filter(player => !player.international);
 
-            let midX = (manager.offsetX || 0) + (manager.width || 600) / 2;
-            let midY = (manager.offsetY || 0) + (manager.height || 520) / 2 + 40;
-            let r = 11;
-            let spacing = 15;
-            let intValues = createCluster(midX / 2, midY, r, spacing, intPrevCircles);
-            let usaValues = createCluster(midX / 3 * 4, midY, r, spacing, usaPrevCircles);
-            this.intCircles = intValues[0];
-            this.usaCircles = usaValues[0];
+            let intValues = createCluster(centerX / 2, centerY, r, spacing, intPrevCircles);
+            let usaValues = createCluster(centerX / 3 * 4, centerY, r, spacing, usaPrevCircles);
 
-            this.doneLoading = true;
+            return {int: intValues, usa: usaValues};
         },
 
         draw: function (p, manager, ai, progress) {
@@ -136,8 +135,9 @@
             //         this.clickedCircle = playerCircle;
             //     }
             // }
-            for(let circle in this.usaCircles) {
-                let playerCircle = this.usaCircles[circle];
+
+            for(let circle in manager.circlesPS.usa) {
+                let playerCircle = manager.circlesPS.usa[circle];
                 let newX = p.map(progress, 0.5, 1, manager.circlesAP[playerCircle.name].x, playerCircle.x);
                 let newY = p.map(progress, 0.5, 1, manager.circlesAP[playerCircle.name].y, playerCircle.y);
 
@@ -147,8 +147,8 @@
                     this.clickedCircle = {...playerCircle, x: newX, y: newY};
                 }
             }
-            for(let circle in this.intCircles) {
-                let playerCircle = this.intCircles[circle];
+            for(let circle in manager.circlesPS.int) {
+                let playerCircle = manager.circlesPS.int[circle];
                 let newX = p.map(progress, 0.5, 1, manager.circlesAP[playerCircle.name].x, playerCircle.x);
                 let newY = p.map(progress, 0.5, 1, manager.circlesAP[playerCircle.name].y, playerCircle.y);
 

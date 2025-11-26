@@ -106,11 +106,12 @@
             p.stroke(219, 219, 219);
             p.fill(180, 180, 180);
             p.line(cx-320, cy + 110, cx + 260 ,cy + 110);
-            p.line(cx-320, cy-100, cx + 260, cy-100);
             p.noStroke();
             p.fill("black");
+            p.textSize(12);
             p.text("25%", cx-340, cy+110);
             p.text("50%", cx-340, cy-100);
+            p.text("0%", cx-340, cy + 320);
             p.pop();
 
             
@@ -118,7 +119,9 @@
 
             p.text("Percentage of NBA players not from the United States", cx - 320, cy - 150);
             p.text("since the 1996-1997 Season to the 2023-2024 Season", cx - 320, cy - 120);
-            
+            p.textSize(18);
+            p.textStyle(p.BOLD);
+            p.text("Seasons (YYYY - YY)", cx - 90, cy + 360);
         }
     };
 })();

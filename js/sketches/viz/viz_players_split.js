@@ -9,8 +9,7 @@
 
         preload: function(manager) {
 
-            let testSeasons = ["1996-97", "2015-16", "2020-21", "2021-22"];
-            this.currentSeason = testSeasons[2] // will change to be determined by manager
+            this.currentSeason = manager.currentSeason; // will change to be determined by manager
             let seasonData = manager.data[this.currentSeason];
             this.maxPlayers = Object.keys(seasonData).length;
             let midX = (manager.offsetX || 0) + (manager.width || 600) / 2;

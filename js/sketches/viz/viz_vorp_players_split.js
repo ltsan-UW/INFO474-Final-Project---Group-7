@@ -1,3 +1,6 @@
+// add country flags
+
+
 (function () {
 
     window.VizVorpPlayersSplit = {
@@ -7,53 +10,22 @@
         currentSeason: null,
         mouseClick: false,
         clickedCircle: null,
+        temp: 0,
 
         preload: function(manager, p) {
 
             let midX = (manager.offsetX || 0) + (manager.width || 600) / 2;
             let midY = (manager.offsetY || 0) + (manager.height || 520) / 2 + 40;
             let testSeasons = ["1996-97", "2015-16", "2020-21", "2021-22"];
-            this.currentSeason = testSeasons[2] // will change to be determined by
+            this.currentSeason = manager.currentSeason; // will change to be determined by
             let seasonData = manager.data[this.currentSeason];
             this.maxPlayers = Object.keys(seasonData).length;
             const vorpMapWorse = 8;
             const vorpMapBest = 4;
 
-            function createCluster(centerX, centerY, r, spacing, prevCircles, minVORP, maxVORP, p, maxArea) {
+            function createCluster(centerX, centerY, r, spacing, prevCircles, minVORP, maxVORP, p, bigRadius) {
                 let newCircles = {};
 
-                // let minBigRadius = Math.sqrt(prevCircles.length * spacing * spacing / Math.PI);
-                // let bigRadius = minBigRadius;
-                // let maxCountRows = Math.floor(bigRadius * 2 / spacing * 1.5) //get the max amount of rows possible with spacing
-                // let minSpacingY = bigRadius * 2 / maxCountRows;
-                // let gap = spacing - r;
-                // let count = 0;
-                // for(let row = 0; row <= maxCountRows; row++) {
-                //     let y = minSpacingY / 2 + row * minSpacingY - bigRadius;
-                //     let maxR = Math.sqrt(bigRadius * bigRadius - y * y);
-                //     let maxX = Math.sqrt(bigRadius * bigRadius - y * y) * 2;
-                //     let xCurrDistance = 0;
-                //     while(xCurrDistance + 10 < maxX) {
-                //         if(count + 1 > prevCircles.length) break;
-                //         let newR = p.map(prevCircles[count].VORP, minVORP, maxVORP, prevCircles[count].r / 4, prevCircles[count].r * 4);
-                //         newCircles[prevCircles[count].name] = {
-                //             x: centerX - maxR + xCurrDistance +  (Math.random() * gap * 2 - gap),
-                //             y: centerY - y + (Math.random() * gap * 2 - gap),
-                //             r: newR,
-                //             VORP: prevCircles[count].VORP,
-                //             name: prevCircles[count].name,
-                //             international: prevCircles[count].international,
-                //             country: prevCircles[count].country
-                //         };
-                //         xCurrDistance += newR * 2;
-                //         count++;
-                //     }
-                // }
-
-
-
-                let minBigRadius = Math.sqrt(prevCircles.length * spacing * spacing / Math.PI);
-                let bigRadius = maxArea;
                 let maxY = bigRadius * 2;
                 let gap = 3;
                 let count = 0;
@@ -63,7 +35,7 @@
                     let maxX = Math.sqrt(bigRadius * bigRadius - yCurrDistance * yCurrDistance) * 2;
                     let xCurrDistance = 0;
                     let largestR = 1;
-                    while(xCurrDistance + 10 < maxX) {
+                    while(xCurrDistance < maxX) {
                         if(count + 1 > prevCircles.length) break;
                         let currCircle = prevCircles[count];
                         let newR = p.map(currCircle.VORP, minVORP, maxVORP, currCircle.r / vorpMapWorse, currCircle.r * vorpMapBest);
@@ -123,6 +95,8 @@
             // let usaValues = createCluster(midX / 4 * 5.5, midY, r, spacing, usaPrevCircles, minVORP, maxVORP, p, Math.sqrt(usaTotalVORP / 2 / Math.PI));
             let intValues = createCluster(midX / 2, midY + 20, r, spacing, intPrevCircles, minVORP, maxVORP, p, Math.sqrt(intTotalVORP / 2 / Math.PI));
             let usaValues = createCluster(midX / 4 * 5.5, midY + Math.sqrt(intTotalVORP / 2 / Math.PI) - Math.sqrt(usaTotalVORP / 2 / Math.PI) + 30, r, spacing, usaPrevCircles, minVORP, maxVORP, p, Math.sqrt(usaTotalVORP / 2 / Math.PI));
+
+            this.temp = Math.sqrt(usaTotalVORP / 2 / Math.PI);
             this.circlesVorpPS = {int: intValues, usa: usaValues};
 
             this.doneLoading = true;
@@ -134,8 +108,17 @@
             }
 
 
+
+            let midX = (manager.offsetX || 0) + (manager.width || 600) / 2;
+            let midY = (manager.offsetY || 0) + (manager.height || 520) / 2 + 40;
+            p.noFill();
+            p.strokeWeight(2);
+            p.stroke('black')
+            //p.circle(midX / 4 * 5.5, midY - 20, this.temp * 2 + 30);
+
             p.noStroke();
             p.fill('black');
+
 
             p.textSize(20);
             p.textStyle(p.BOLD);

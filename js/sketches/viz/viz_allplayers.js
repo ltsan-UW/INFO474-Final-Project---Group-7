@@ -8,8 +8,7 @@
         clickedCircle: null,
 
         preload: function(manager) {
-            let testSeasons = ["1996-97", "2015-16", "2020-21", "2021-22"];
-            this.currentSeason = testSeasons[2] // will change to be determined by manager
+            this.currentSeason = manager.currentSeason; // will change to be determined by manager
             let seasonData = manager.data[this.currentSeason];
 
 
@@ -143,6 +142,7 @@
             p.fill('black');
             p.textAlign(p.CENTER, p.CENTER);
             if(this.clickedCircle != null) {
+                p.cursor(p.HAND);
                 p.fill('red')
                 p.circle(this.clickedCircle.x, this.clickedCircle.y, this.clickedCircle.r + 5);
                 p.fill('black');
@@ -152,6 +152,7 @@
                     this.clickedCircle = null;
                 }
             } else {
+                p.cursor(p.ARROW);
                 p.noStroke();
                 p.fill('grey');
                 p.text("Hover over a player", manager.offsetX + manager.width - 125 - 5, manager.offsetY + 40);

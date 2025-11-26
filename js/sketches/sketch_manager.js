@@ -26,6 +26,9 @@ function startP5() {
         // circle objects for players split between international and domestic
         this.circlesPS = {};
 
+        // currentSeason that is used for all vizes
+        this.currentSeason = "2023-24"
+
         // create the p5 instance bound to this manager
         var self = this;
         var sketch = function (p) {

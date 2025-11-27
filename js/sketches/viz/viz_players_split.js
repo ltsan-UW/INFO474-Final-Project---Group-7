@@ -88,8 +88,8 @@
             let hoverCircle = null;
             for(let circle in manager.circlesPS.usa) {
                 let playerCircle = manager.circlesPS.usa[circle];
-                let newX = p.map(progress, 0.5, 1, manager.circlesAP[playerCircle.name].x, playerCircle.x);
-                let newY = p.map(progress, 0.5, 1, manager.circlesAP[playerCircle.name].y, playerCircle.y);
+                let newX = p.map(p.constrain(progress, 0.5, 0.8), 0.5, 0.8, manager.circlesAP[playerCircle.name].x, playerCircle.x);
+                let newY = p.map(p.constrain(progress, 0.5, 0.8), 0.5, 0.8, manager.circlesAP[playerCircle.name].y, playerCircle.y);
                 playerCircle = {...playerCircle, x: newX, y: newY};
 
 
@@ -101,8 +101,8 @@
             }
             for(let circle in manager.circlesPS.int) {
                 let playerCircle = manager.circlesPS.int[circle];
-                let newX = p.map(progress, 0.5, 1, manager.circlesAP[playerCircle.name].x, playerCircle.x);
-                let newY = p.map(progress, 0.5, 1, manager.circlesAP[playerCircle.name].y, playerCircle.y);
+                let newX = p.map(p.constrain(progress, 0.5, 0.8), 0.5, 0.8, manager.circlesAP[playerCircle.name].x, playerCircle.x);
+                let newY = p.map(p.constrain(progress, 0.5, 0.8), 0.5, 0.8, manager.circlesAP[playerCircle.name].y, playerCircle.y);
                 playerCircle = {...playerCircle, x: newX, y: newY};
 
 

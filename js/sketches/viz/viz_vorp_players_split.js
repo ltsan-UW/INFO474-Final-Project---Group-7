@@ -114,9 +114,9 @@
             //Draw circles: usa, then international
             for(let circle in this.circlesVorpPS.usa) {
                 let playerCircle = this.circlesVorpPS.usa[circle];
-                let newX = p.map(progress, 0.5, 1, manager.circlesPS.usa[playerCircle.name].x, playerCircle.x);
-                let newY = p.map(progress, 0.5, 1, manager.circlesPS.usa[playerCircle.name].y, playerCircle.y);
-                let newR = p.map(progress, 0.5, 1, manager.circlesPS.usa[playerCircle.name].r, playerCircle.r);
+                let newX = p.map(p.constrain(progress, 0.5, 0.53), 0.5, 0.53, manager.circlesPS.usa[playerCircle.name].x, playerCircle.x);
+                let newY = p.map(p.constrain(progress, 0.5, 0.53), 0.5, 0.53, manager.circlesPS.usa[playerCircle.name].y, playerCircle.y);
+                let newR = p.map(p.constrain(progress, 0.5, 0.53), 0.5, 0.53, manager.circlesPS.usa[playerCircle.name].r, playerCircle.r);
                 playerCircle = {...playerCircle, x: newX, y: newY, r: newR};
 
                 VizAllPlayers.drawCircle(playerCircle, p, manager.flagImages);
@@ -127,9 +127,9 @@
             }
             for(let circle in this.circlesVorpPS.int) {
                 let playerCircle = this.circlesVorpPS.int[circle];
-                let newX = p.map(progress, 0.5, 1, manager.circlesPS.int[playerCircle.name].x, playerCircle.x);
-                let newY = p.map(progress, 0.5, 1, manager.circlesPS.int[playerCircle.name].y, playerCircle.y);
-                let newR = p.map(progress, 0.5, 1, manager.circlesPS.int[playerCircle.name].r, playerCircle.r);
+                let newX = p.map(p.constrain(progress, 0.5, 0.53), 0.5, 0.53, manager.circlesPS.int[playerCircle.name].x, playerCircle.x);
+                let newY = p.map(p.constrain(progress, 0.5, 0.53), 0.5, 0.53, manager.circlesPS.int[playerCircle.name].y, playerCircle.y);
+                let newR = p.map(p.constrain(progress, 0.5, 0.53), 0.5, 0.53, manager.circlesPS.int[playerCircle.name].r, playerCircle.r);
                 playerCircle = {...playerCircle, x: newX, y: newY, r: newR};
 
                 VizAllPlayers.drawCircle(playerCircle, p, manager.flagImages);

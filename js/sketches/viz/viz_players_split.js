@@ -14,14 +14,14 @@
 
             // load all players circles data from viz 1 if null
             if(!manager.circlesAP || Object.keys(manager.circlesAP).length === 0) {
-                let newCircles = VizAllPlayers.createCirclesAP(midX, midY, seasonData, 11, 15)
+                let newCircles = VizAllPlayers.createCirclesAP(midX, midY, seasonData, manager.circleSize.r, manager.circleSize.spacing)
                 manager.setCirclesAP(newCircles);
 
                 let flags = VizAllPlayers.createFlagImages(newCircles, p);
                 manager.setFlagImages(flags);
             }
 
-            let newCircles = this.createPlayersSplitClusters(midX, midY, manager.circlesAP, 11, 15)
+            let newCircles = this.createPlayersSplitClusters(midX, midY, manager.circlesAP, manager.circleSize.r, manager.circleSize.spacing)
             manager.setCirclesPS(newCircles);
 
             this.doneLoading = true;

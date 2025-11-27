@@ -62,12 +62,12 @@
             // load all players circles data from viz 1 and/or 2 if null
             if(!manager.circlesPS || Object.keys(manager.circlesPS).length === 0) {
                 if(!manager.circlesAP || Object.keys(manager.circlesAP).length === 0) {
-                    let newCircles = VizAllPlayers.createCirclesAP(midX, midY, seasonData, 11, 15)
+                    let newCircles = VizAllPlayers.createCirclesAP(midX, midY, seasonData, manager.circleSize.r, manager.circleSize.spacing)
                     manager.setCirclesAP(newCircles);
                     let flags = VizAllPlayers.createFlagImages(newCircles, p);
                     manager.setFlagImages(flags);
                 }
-                let newCircles = VizPlayersSplit.createPlayersSplitClusters(midX, midY, manager.circlesAP, 11, 15)
+                let newCircles = VizPlayersSplit.createPlayersSplitClusters(midX, midY, manager.circlesAP, manager.circleSize.r, manager.circleSize.spacing)
                 manager.setCirclesPS(newCircles);
             }
 
@@ -86,8 +86,8 @@
             const intTotalVORP = intPrevCircles.reduce((sum, c) => sum + p.map(c.VORP, minVORP, maxVORP, 11 / vorpMapWorse, 11 * vorpMapBest) * p.map(c.VORP, minVORP, maxVORP, 11 / vorpMapWorse, 11 * vorpMapBest) * Math.PI, 0);
             const usaTotalVORP = usaPrevCircles.reduce((sum, c) => sum + p.map(c.VORP, minVORP, maxVORP, 11 / vorpMapWorse, 11 * vorpMapBest) * p.map(c.VORP, minVORP, maxVORP, 11 / vorpMapWorse, 11 * vorpMapBest) * Math.PI, 0);
 
-            let r = 11;
-            let spacing = 15;
+            let r = manager.circleSize.r;
+            let spacing = manager.circleSize.spacing;
             // let intValues = createCluster(midX / 2, midY, r, spacing, intPrevCircles, minVORP, maxVORP, p, Math.sqrt(intTotalVORP / 2 / Math.PI));
             // let usaValues = createCluster(midX / 4 * 5.5, midY, r, spacing, usaPrevCircles, minVORP, maxVORP, p, Math.sqrt(usaTotalVORP / 2 / Math.PI));
             let intValues = createCluster(midX / 2, midY + 20, r, spacing, intPrevCircles, minVORP, maxVORP, p, Math.sqrt(intTotalVORP / 2 / Math.PI));

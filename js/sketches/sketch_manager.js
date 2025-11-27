@@ -21,6 +21,11 @@ function startP5() {
         // data will be attached by localRenderer.setData(manager, data)
         this.data = [];
 
+        // circle size r and spacing
+        this.circleSize = {
+            r: 11,
+            spacing: 15
+        };
         // circle objects for all players
         this.circlesAP = {};
         // circle objects for players split between international and domestic

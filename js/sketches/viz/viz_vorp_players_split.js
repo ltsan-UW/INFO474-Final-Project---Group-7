@@ -88,8 +88,8 @@
 
             // let intValues = createCluster(midX / 2, midY, r, spacing, intPrevCircles, minVORP, maxVORP, p, Math.sqrt(intTotalVORP / 2 / Math.PI));
             // let usaValues = createCluster(midX / 4 * 5.5, midY, r, spacing, usaPrevCircles, minVORP, maxVORP, p, Math.sqrt(usaTotalVORP / 2 / Math.PI));
-            let intValues = createCluster(midX - usaBigRadius * 0.9 - 30, midY, intPrevCircles, minVORP, maxVORP, p, usaBigRadius * 0.85, manager.circleScatterStrength);
-            let usaValues = createCluster(midX + usaBigRadius * 0.9, midY, usaPrevCircles, minVORP, maxVORP, p, usaBigRadius * 0.85, manager.circleScatterStrength);
+            let intValues = createCluster(midX - usaBigRadius * 0.9 - 15, midY, intPrevCircles, minVORP, maxVORP, p, usaBigRadius * 0.85, manager.circleScatterStrength);
+            let usaValues = createCluster(midX + usaBigRadius * 0.9 + 15, midY, usaPrevCircles, minVORP, maxVORP, p, usaBigRadius * 0.85, manager.circleScatterStrength);
 
             this.circlesVorpPS = {int: intValues, usa: usaValues};
 
@@ -103,17 +103,7 @@
 
             p.noFill();
 
-            p.noStroke();
-            p.fill('black');
-
-
-            p.textSize(20);
-            p.textStyle(p.BOLD);
-            p.text('NBA Season ' + manager.currentSeason, manager.offsetX + 5, manager.offsetY + 35);
-            p.textSize(18);
-            p.textStyle(p.NORMAL);
-            p.text('Total Players: ' + this.maxPlayers, manager.offsetX + 5, manager.offsetY + 55);
-
+            VizAllPlayers.drawHeader(p, manager.currentSeason, manager);
 
             p.strokeWeight(1);
             p.stroke('grey')
@@ -148,13 +138,6 @@
                     hoverCircle = playerCircle;
                 }
             }
-
-
-
-            p.fill('white');
-            p.rect(manager.offsetX + manager.width - 250 - 5, manager.offsetY + 15, 250, 50);
-            // p.line(manager.offsetX + manager.width, manager.offsetY, manager.offsetX + manager.width, manager.offsetY + manager.height);
-            // p.line(manager.offsetX, manager.offsetY + manager.height, manager.offsetX, manager.offsetY);
 
 
             // Hover

@@ -66,8 +66,8 @@
             const intPrevCircles = circlesArray.filter(player => player.international);
             const usaPrevCircles = circlesArray.filter(player => !player.international);
 
-            let intValues = createCluster(centerX / 8 * 3, centerY, r, spacing, intPrevCircles, scatterStrength);
-            let usaValues = createCluster(centerX / 8 * 10, centerY, r, spacing, usaPrevCircles, scatterStrength);
+            let intValues = createCluster(centerX / 2 - 10, centerY, r, spacing, intPrevCircles, scatterStrength);
+            let usaValues = createCluster(centerX / 8 * 10 + 25, centerY, r, spacing, usaPrevCircles, scatterStrength);
 
             return {int: intValues, usa: usaValues};
         },
@@ -78,15 +78,7 @@
             }
 
 
-            p.noStroke();
-            p.fill('black');
-
-            p.textSize(20);
-            p.textStyle(p.BOLD);
-            p.text('NBA Season ' + manager.currentSeason, manager.offsetX + 5, manager.offsetY + 35);
-            p.textSize(18);
-            p.textStyle(p.NORMAL);
-            p.text('Total Players: ' + this.maxPlayers, manager.offsetX + 5, manager.offsetY + 55);
+            VizAllPlayers.drawHeader(p, manager.currentSeason, manager);
 
 
             p.strokeWeight(1);
@@ -120,11 +112,6 @@
                     hoverCircle = {...playerCircle, x: newX, y: newY};
                 }
             }
-
-
-
-            p.fill('white');
-            p.rect(manager.offsetX + manager.width - 250 - 5, manager.offsetY + 15, 250, 50);
 
             // Hover
             if (hoverCircle !== null && p.dist(p.mouseX, p.mouseY, hoverCircle.x, hoverCircle.y) > (hoverCircle.r / 2 + 5)) {

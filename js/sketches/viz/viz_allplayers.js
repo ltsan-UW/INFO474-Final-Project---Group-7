@@ -103,15 +103,8 @@
                 this.preload(manager, p);
             }
 
-            p.noStroke();
-            p.fill('black');
+            this.drawHeader(p, manager.currentSeason, manager);
 
-            p.textSize(20);
-            p.textStyle(p.BOLD);
-            p.text('NBA Season ' + this.currentSeason, manager.offsetX + 5, manager.offsetY + 35);
-            p.textSize(18);
-            p.textStyle(p.NORMAL);
-            p.text('Total Players: ' + this.maxPlayers, manager.offsetX + 5, manager.offsetY + 55);
 
 
             // p.circle(manager.offsetX + manager.width / 2, manager.offsetY + manager.height / 2, bigRadius * 2);
@@ -159,10 +152,6 @@
                 }
             }
 
-
-
-            p.fill('white');
-            p.rect(manager.offsetX + manager.width - 250 - 5, manager.offsetY + 15, 250, 50);
 
             // Hover
             if (hoverCircle !== null && p.dist(p.mouseX, p.mouseY, hoverCircle.x, hoverCircle.y) > (hoverCircle.r / 2 + 5)) {
@@ -218,6 +207,21 @@
                 p.text("Hover over a player", manager.offsetX + manager.width - 125 - 5, manager.offsetY + 40);
             }
             p.textAlign(p.LEFT, p.BASELINE);
+        },
+
+        drawHeader: function(p, season, manager) {
+
+            p.stroke('grey')
+            p.fill('white');
+            p.rect(manager.offsetX + manager.width - 250 - 5, manager.offsetY + 15, 250, 50);
+            p.noStroke();
+            p.fill('black');
+            p.textSize(20);
+            p.textStyle(p.BOLD);
+            p.text('NBA Season ' + season, manager.offsetX, manager.offsetY + 35);
+            p.textSize(18);
+            p.textStyle(p.NORMAL);
+            p.text('Total Players: ' + this.maxPlayers, manager.offsetX + 5, manager.offsetY + 55);
         }
     };
 

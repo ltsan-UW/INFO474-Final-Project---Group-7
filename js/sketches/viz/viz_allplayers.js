@@ -6,8 +6,9 @@
         currentSeason: null,
         mouseClick: false,
         clickedCircle: null,
+        flags: null,
 
-        preload: function(manager) {
+        preload: function(manager, p) {
             this.currentSeason = manager.currentSeason; // will change to be determined by manager
             let seasonData = manager.data[this.currentSeason];
 
@@ -20,12 +21,32 @@
             let newCircles = this.createCirclesAP(midX, midY, seasonData, 11, 15)
             manager.setCirclesAP(newCircles);
 
+            let flags = this.createFlagImages(newCircles, p);
+            manager.setFlagImages(flags);
+
             // // Click function. Written with AI, I didn't wanna mess with using a onClick function and going through the instance stuff
             // document.querySelector('canvas').addEventListener('click', (e) => {
             //     this.mouseClick = !this.mouseClick;
             // });
 
+
+
             this.doneLoading = true;
+        },
+
+        createFlagImages: function(circles, p) {
+            let flags = new Map();
+            for(let name in circles) {
+                if(!flags.has(circles[name].country)) {
+                    let img = p.loadImage(
+                        "js/sketches/images/player_flags/" + circles[name].country + ".webp",
+                        () => { },
+                        () => { console.error("Failed to load country: " + circles[name].country); }
+                    );
+                    flags.set(circles[name].country, img);
+                }
+            }
+            return flags;
         },
 
         createCirclesAP: function(centerX, centerY, seasonData, r, spacing) {
@@ -75,7 +96,7 @@
 
         draw: function (p, manager, ai, progress) {
             if(!this.doneLoading) {
-                this.preload(manager);
+                this.preload(manager, p);
             }
 
             p.noStroke();
@@ -126,7 +147,23 @@
 
             for(let circle in manager.circlesAP) {
                 let playerCircle = manager.circlesAP[circle];
-                p.circle(playerCircle.x, playerCircle.y, playerCircle.r);
+                if(manager.flagImages.has(playerCircle.country)) {
+                    p.circle(playerCircle.x, playerCircle.y, playerCircle.r);
+
+                    // Written with AI
+                    // --- create circular clip ---
+                    p.drawingContext.save();
+                    p.drawingContext.beginPath();
+                    p.drawingContext.arc(playerCircle.x, playerCircle.y, playerCircle.r / 2, 0, Math.PI * 2);
+                    p.drawingContext.clip();
+
+                    // --- draw image inside circle ---
+                    // Make the image exactly fill the circle
+                    p.image(manager.flagImages.get(playerCircle.country), playerCircle.x - playerCircle.r / 2, playerCircle.y - playerCircle.r / 2, playerCircle.r, playerCircle.r);
+
+                    p.drawingContext.restore();
+                } else p.circle(playerCircle.x, playerCircle.y, playerCircle.r);
+
                 if (p.dist(p.mouseX, p.mouseY, playerCircle.x, playerCircle.y) < (playerCircle.r / 2 + 5)) {
                     this.clickedCircle = playerCircle;
                 }

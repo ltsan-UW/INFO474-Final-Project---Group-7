@@ -7,7 +7,6 @@
         doneLoading: false,
         maxPlayers: 0,
         circlesVorpPS: null,
-        currentSeason: null,
         mouseClick: false,
         clickedCircle: null,
         temp: 0,
@@ -16,9 +15,7 @@
 
             let midX = (manager.offsetX || 0) + (manager.width || 600) / 2;
             let midY = (manager.offsetY || 0) + (manager.height || 520) / 2 + 40;
-            let testSeasons = ["1996-97", "2015-16", "2020-21", "2021-22"];
-            this.currentSeason = manager.currentSeason; // will change to be determined by
-            let seasonData = manager.data[this.currentSeason];
+            let seasonData = manager.data[manager.currentSeason];
             this.maxPlayers = Object.keys(seasonData).length;
             const vorpMapWorse = 8;
             const vorpMapBest = 4;
@@ -67,6 +64,8 @@
                 if(!manager.circlesAP || Object.keys(manager.circlesAP).length === 0) {
                     let newCircles = VizAllPlayers.createCirclesAP(midX, midY, seasonData, 11, 15)
                     manager.setCirclesAP(newCircles);
+                    let flags = VizAllPlayers.createFlagImages(newCircles, p);
+                    manager.setFlagImages(flags);
                 }
                 let newCircles = VizPlayersSplit.createPlayersSplitClusters(midX, midY, manager.circlesAP, 11, 15)
                 manager.setCirclesPS(newCircles);
@@ -77,8 +76,6 @@
             const maxVORP = Math.max(...vorpValues);
             const minVORP = Math.min(...vorpValues);
 
-            console.log("Max VORP:", maxVORP);
-            console.log("Min VORP:", minVORP);
 
             const intPrevCircles = Object.values(manager.circlesPS.int)
                 .sort((a, b) => b.VORP - a.VORP);  // highest → lowest
@@ -122,7 +119,7 @@
 
             p.textSize(20);
             p.textStyle(p.BOLD);
-            p.text('NBA Season ' + this.currentSeason, manager.offsetX + 5, manager.offsetY + 35);
+            p.text('NBA Season ' + manager.currentSeason, manager.offsetX + 5, manager.offsetY + 35);
             p.textSize(18);
             p.textStyle(p.NORMAL);
             p.text('Total Players: ' + this.maxPlayers, manager.offsetX + 5, manager.offsetY + 55);
@@ -180,8 +177,23 @@
                 let newY = p.map(progress, 0.5, 1, manager.circlesPS.usa[playerCircle.name].y, playerCircle.y);
                 let newR = p.map(progress, 0.5, 1, manager.circlesPS.usa[playerCircle.name].r, playerCircle.r);
 
-                p.fill('blue');
                 p.circle(newX, newY, newR);
+                if(manager.flagImages.has(playerCircle.country)) {
+
+                    // Written with AI
+                    // --- create circular clip ---
+                    p.drawingContext.save();
+                    p.drawingContext.beginPath();
+                    p.drawingContext.arc(newX, newY, newR / 2, 0, Math.PI * 2);
+                    p.drawingContext.clip();
+
+                    // --- draw image inside circle ---
+                    // Make the image exactly fill the circle
+                    p.image(manager.flagImages.get(playerCircle.country), newX - newR / 2, newY - newR / 2, newR, newR);
+
+                    p.drawingContext.restore();
+                }
+
                 if (p.dist(p.mouseX, p.mouseY, playerCircle.x, playerCircle.y) < (playerCircle.r / 2 + 5)) {
                     this.clickedCircle = {...playerCircle, r: newR};
                 }
@@ -192,9 +204,24 @@
                 let newY = p.map(progress, 0.5, 1, manager.circlesPS.int[playerCircle.name].y, playerCircle.y);
                 let newR = p.map(progress, 0.5, 1, manager.circlesPS.int[playerCircle.name].r, playerCircle.r);
 
-                p.fill('pink');
                 p.circle(newX, newY, newR);
-                if (p.dist(p.mouseX, p.mouseY, playerCircle.x, playerCircle.y) < (playerCircle.r / 2 + 5)) {
+                if(manager.flagImages.has(playerCircle.country)) {
+
+                    // Written with AI
+                    // --- create circular clip ---
+                    p.drawingContext.save();
+                    p.drawingContext.beginPath();
+                    p.drawingContext.arc(newX, newY, newR / 2, 0, Math.PI * 2);
+                    p.drawingContext.clip();
+
+                    // --- draw image inside circle ---
+                    // Make the image exactly fill the circle
+                    p.image(manager.flagImages.get(playerCircle.country), newX - newR / 2, newY - newR / 2, newR, newR);
+
+                    p.drawingContext.restore();
+                }
+
+                if (p.dist(p.mouseX, p.mouseY, newX, newY) < (newR / 2 + 5)) {
                     this.clickedCircle = {...playerCircle, r: newR};
                 }
             }
@@ -224,29 +251,6 @@
 
             }
             p.textAlign(p.LEFT, p.BASELINE);
-
-            // let bigRadius = manager.height * 0.46 - 2;
-            // let maxSpacing = Math.sqrt(p.PI * bigRadius * bigRadius / this.maxPlayers);
-            // let r = maxSpacing * 0.7;
-            // console.log(maxSpacing)
-            // let spacing = maxSpacing;
-            // let maxCountRows = Math.floor(bigRadius * 2 / spacing) //get the max amount of rows possible with spacing
-            // let minSpacingY = bigRadius * 2 / maxCountRows;
-            // p.randomSeed(999);
-            // let gap = spacing - r;
-            // let count = 0;
-            // for(let row = 0; row <= maxCountRows; row++) {
-            //     let y = minSpacingY / 2 + row * minSpacingY - bigRadius;
-            //     let maxX = Math.sqrt(bigRadius * bigRadius - y * y);
-            //     let maxCountCols = Math.floor(maxX * 2 / spacing);
-            //     let minSpacingX = (maxCountCols != 0 ? maxX * 2 / maxCountCols : 0);
-            //     for(let i = 0; i <= maxCountCols; i++) {
-            //         if(count + 1 > this.maxPlayers) break;
-            //         p.circle(midX - maxX + (minSpacingX * i) + p.random(-gap, gap), midY - y + p.random(-gap, gap), r);
-            //         count++;
-            //     }
-            // }
-
 
             p.noStroke();
             p.fill('black');

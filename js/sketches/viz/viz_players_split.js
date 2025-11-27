@@ -3,23 +3,22 @@
     window.VizPlayersSplit = {
         doneLoading: false,
         maxPlayers: 0,
-        currentSeason: null,
         mouseClick: false,
         clickedCircle: null,
 
-        preload: function(manager) {
-
-            this.currentSeason = manager.currentSeason; // will change to be determined by manager
-            let seasonData = manager.data[this.currentSeason];
+        preload: function(manager, p) {
+            let seasonData = manager.data[manager.currentSeason];
             this.maxPlayers = Object.keys(seasonData).length;
             let midX = (manager.offsetX || 0) + (manager.width || 600) / 2;
             let midY = (manager.offsetY || 0) + (manager.height || 520) / 2 + 40;
 
             // load all players circles data from viz 1 if null
             if(!manager.circlesAP || Object.keys(manager.circlesAP).length === 0) {
-
                 let newCircles = VizAllPlayers.createCirclesAP(midX, midY, seasonData, 11, 15)
                 manager.setCirclesAP(newCircles);
+
+                let flags = VizAllPlayers.createFlagImages(newCircles, p);
+                manager.setFlagImages(flags);
             }
 
             let newCircles = this.createPlayersSplitClusters(midX, midY, manager.circlesAP, 11, 15)
@@ -73,7 +72,7 @@
 
         draw: function (p, manager, ai, progress) {
             if(!this.doneLoading) {
-                this.preload(manager);
+                this.preload(manager, p);
             }
 
 
@@ -82,7 +81,7 @@
 
             p.textSize(20);
             p.textStyle(p.BOLD);
-            p.text('NBA Season ' + this.currentSeason, manager.offsetX + 5, manager.offsetY + 35);
+            p.text('NBA Season ' + manager.currentSeason, manager.offsetX + 5, manager.offsetY + 35);
             p.textSize(18);
             p.textStyle(p.NORMAL);
             p.text('Total Players: ' + this.maxPlayers, manager.offsetX + 5, manager.offsetY + 55);
@@ -125,23 +124,29 @@
             p.stroke('grey')
             p.fill('lightgrey');
 
-            // for(let circle in manager.circlesAP) {
-            //     let playerCircle = manager.circlesAP[circle];
-            //     if(playerCircle.international) p.fill('pink');
-            //     else p.fill('blue');
-            //     p.circle(playerCircle.x, playerCircle.y, playerCircle.r);
-            //     if (p.dist(p.mouseX, p.mouseY, playerCircle.x, playerCircle.y) < (playerCircle.r / 2 + 5)) {
-            //         this.clickedCircle = playerCircle;
-            //     }
-            // }
-
             for(let circle in manager.circlesPS.usa) {
                 let playerCircle = manager.circlesPS.usa[circle];
                 let newX = p.map(progress, 0.5, 1, manager.circlesAP[playerCircle.name].x, playerCircle.x);
                 let newY = p.map(progress, 0.5, 1, manager.circlesAP[playerCircle.name].y, playerCircle.y);
 
-                p.fill('blue');
+
                 p.circle(newX, newY, playerCircle.r);
+                if(manager.flagImages.has(playerCircle.country)) {
+
+                    // Written with AI
+                    // --- create circular clip ---
+                    p.drawingContext.save();
+                    p.drawingContext.beginPath();
+                    p.drawingContext.arc(newX, newY, playerCircle.r / 2, 0, Math.PI * 2);
+                    p.drawingContext.clip();
+
+                    // --- draw image inside circle ---
+                    // Make the image exactly fill the circle
+                    p.image(manager.flagImages.get(playerCircle.country), newX - playerCircle.r / 2, newY - playerCircle.r / 2, playerCircle.r, playerCircle.r);
+
+                    p.drawingContext.restore();
+                }
+
                 if (p.dist(p.mouseX, p.mouseY, newX, newY) < (playerCircle.r / 2 + 5)) {
                     this.clickedCircle = {...playerCircle, x: newX, y: newY};
                 }
@@ -151,8 +156,23 @@
                 let newX = p.map(progress, 0.5, 1, manager.circlesAP[playerCircle.name].x, playerCircle.x);
                 let newY = p.map(progress, 0.5, 1, manager.circlesAP[playerCircle.name].y, playerCircle.y);
 
-                p.fill('pink');
+
                 p.circle(newX, newY, playerCircle.r);
+                if(manager.flagImages.has(playerCircle.country)) {
+
+                    // Written with AI
+                    // --- create circular clip ---
+                    p.drawingContext.save();
+                    p.drawingContext.beginPath();
+                    p.drawingContext.arc(newX, newY, playerCircle.r / 2, 0, Math.PI * 2);
+                    p.drawingContext.clip();
+
+                    // --- draw image inside circle ---
+                    // Make the image exactly fill the circle
+                    p.image(manager.flagImages.get(playerCircle.country), newX - playerCircle.r / 2, newY - playerCircle.r / 2, playerCircle.r, playerCircle.r);
+
+                    p.drawingContext.restore();
+                }
                 if (p.dist(p.mouseX, p.mouseY, newX, newY) < (playerCircle.r / 2 + 5)) {
                     this.clickedCircle = {...playerCircle, x: newX, y: newY};
                 }

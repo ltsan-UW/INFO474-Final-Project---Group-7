@@ -26,6 +26,9 @@ function startP5() {
             r: 11,
             spacing: 15
         };
+        // circle scatter strength 0 - 1
+        this.circleScatterStrength = 1;
+
         // circle objects for all players
         this.circlesAP = {};
         // circle objects for players split between international and domestic

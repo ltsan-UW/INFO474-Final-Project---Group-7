@@ -17,7 +17,7 @@
             let midY = (manager.offsetY || 0) + (manager.height || 520) / 2 + 40;
 
 
-            let newCircles = this.createCirclesAP(midX, midY, seasonData, 11, 15)
+            let newCircles = this.createCirclesAP(midX, midY, seasonData, manager.circleSize.r, manager.circleSize.spacing, manager.circleScatterStrength);
             manager.setCirclesAP(newCircles);
 
             // load flag images if null
@@ -51,7 +51,7 @@
             return flags;
         },
 
-        createCirclesAP: function(centerX, centerY, seasonData, r, spacing) {
+        createCirclesAP: function(centerX, centerY, seasonData, r, spacing, scatterStrength) {
 
             // Convert seasonData object to a sorted array by VORP (descending)
             let sortedPlayers = Object.entries(seasonData)
@@ -68,16 +68,16 @@
             //let r = maxSpacing * 0.7;
 
             // This formula uses a constant radius and spacing player circle size to define the size of the big circle
-            let minBigRadius = Math.sqrt(maxPlayers * spacing * spacing / Math.PI);
+            let minBigRadius = Math.sqrt((maxPlayers) * spacing * spacing / Math.PI);
             let bigRadius = minBigRadius;
             let maxCountRows = Math.floor(bigRadius * 2 / spacing) //get the max amount of rows possible with spacing
             let minSpacingY = bigRadius * 2 / maxCountRows;
-            let gap = spacing - r;
+            let gap = (spacing - r) * scatterStrength;
             let count = 0;
             for(let row = 0; row <= maxCountRows; row++) {
                 let y = minSpacingY / 2 + row * minSpacingY - bigRadius;
                 let maxX = Math.sqrt(bigRadius * bigRadius - y * y);
-                let maxCountCols = Math.floor(maxX * 2 / spacing);
+                let maxCountCols = Math.round(maxX * 2 / spacing);
                 let minSpacingX = (maxCountCols != 0 ? maxX * 2 / maxCountCols : 0);
                 for(let i = 0; i <= maxCountCols; i++) {
                     if(count + 1 > maxPlayers) break;

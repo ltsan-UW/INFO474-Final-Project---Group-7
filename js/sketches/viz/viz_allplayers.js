@@ -43,7 +43,6 @@
                     let img = p.loadImage(
                         "js/sketches/images/player_flags/" + circles[name].country + ".webp",
                         (img) => {
-                            img.resize(100, 100);
                             flags.set(circles[name].country, img);
                         },
                         () => { console.error("Failed to load country: " + circles[name].country); }

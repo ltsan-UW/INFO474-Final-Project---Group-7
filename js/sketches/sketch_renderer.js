@@ -57,22 +57,22 @@
                 return;
             }
 
-            if (ai === 2 && manager.data.length != 0) {
+            if (ai === 3 && manager.data.length != 0) {
                 window.VizAllPlayers.draw(p, manager, ai, progress);
                 return;
             }
 
-            if (ai === 3 && manager.data.length != 0) {
+            if (ai === 4 && manager.data.length != 0) {
                 window.VizPlayersSplit.draw(p, manager, ai, progress);
                 return;
             }
 
-            if (ai === 4 && manager.data.length != 0) {
+            if (ai === 5 && manager.data.length != 0) {
                 window.VizVorpPlayersSplit.draw(p, manager, ai, progress);
                 return;
             }
 
-            if (ai === 5) {
+            if (ai === 2) {
                 window.VizTopTenPlayers.draw(p, manager, ai, progress);
                 return;
             }

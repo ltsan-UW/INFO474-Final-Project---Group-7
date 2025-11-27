@@ -22,7 +22,7 @@
 
             // load flag images if null
             if(manager.flagImages === null) {
-                let flags = VizAllPlayers.createFlagImages(newCircles, p);
+                let flags = this.createFlagImages(newCircles, p);
                 manager.setFlagImages(flags);
             }
 
@@ -36,16 +36,18 @@
             this.doneLoading = true;
         },
 
-        createFlagImages: function(circles, p) {
+        createFlagImages: function(circles, p,) {
             let flags = new Map();
             for(let name in circles) {
                 if(!flags.has(circles[name].country)) {
                     let img = p.loadImage(
                         "js/sketches/images/player_flags/" + circles[name].country + ".webp",
-                        () => { },
+                        (img) => {
+                            img.resize(100, 100);
+                            flags.set(circles[name].country, img);
+                        },
                         () => { console.error("Failed to load country: " + circles[name].country); }
                     );
-                    flags.set(circles[name].country, img);
                 }
             }
             return flags;
@@ -174,6 +176,7 @@
         },
 
         drawCircle: function(playerCircle, p, flagImages) {
+            p.imageMode(p.CORNER);
             p.circle(playerCircle.x, playerCircle.y, playerCircle.r);
             if(flagImages.has(playerCircle.country)) {
 
@@ -186,6 +189,7 @@
 
                 // --- draw image inside circle ---
                 // Make the image exactly fill the circle
+
                 p.image(flagImages.get(playerCircle.country), playerCircle.x - playerCircle.r / 2, playerCircle.y - playerCircle.r / 2, playerCircle.r, playerCircle.r);
 
                 p.drawingContext.restore();

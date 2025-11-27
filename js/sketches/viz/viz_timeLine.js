@@ -2,7 +2,6 @@
 (function () {
     window.VizTimeline = {
         doneLoading: false,
-        DR_Congo: null,
 
         preload: function(manager, p){
             this.DR_Congo = p.loadImage("js/sketches/images/emojis/DR_Congo.png");

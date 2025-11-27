@@ -47,35 +47,49 @@
 
             //MAKE SURE TO ADD ALL NEW FILES TO A <script> BLOCK IN index.html
 
-
             if (ai === 0 && manager.data.length != 0) {
-                window.VizAllPlayers.draw(p, manager, ai, progress);
+                window.VizTitle.draw(p, manager, ai, progress);
                 return;
             }
 
             if (ai === 1 && manager.data.length != 0) {
-                window.VizPlayersSplit.draw(p, manager, ai, progress);
+                window.VizIntro.draw(p, manager, ai, progress);
                 return;
             }
 
             if (ai === 2 && manager.data.length != 0) {
+                window.VizAllPlayers.draw(p, manager, ai, progress);
+                return;
+            }
+
+            if (ai === 3 && manager.data.length != 0) {
+                window.VizPlayersSplit.draw(p, manager, ai, progress);
+                return;
+            }
+
+            if (ai === 4 && manager.data.length != 0) {
                 window.VizVorpPlayersSplit.draw(p, manager, ai, progress);
                 return;
             }
 
-            if (ai === 3) {
+            if (ai === 5) {
                 window.VizTopTenPlayers.draw(p, manager, ai, progress);
                 return;
             }
 
-            if (ai === 4) {
+            if (ai === 6) {
                 window.VizLineGraph.draw(p, manager, ai, progress);
                 return;
             }
 
-            if (ai === 5) {
+            if (ai === 7) {
                 //window.VizLineGraphZoomed.draw(p, manager, ai, progress);
                 window.VizTimeline.draw(p, manager, ai, progress);
+                return;
+            }
+
+            if (ai === 8 || ai === 9) {
+                window.VizIntro.draw(p, manager, ai, progress);
                 return;
             }
         }

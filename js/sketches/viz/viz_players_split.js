@@ -4,7 +4,6 @@
         doneLoading: false,
         maxPlayers: 0,
         mouseClick: false,
-        clickedCircle: null,
 
         preload: function(manager, p) {
             let seasonData = manager.data[manager.currentSeason];
@@ -17,8 +16,11 @@
                 let newCircles = VizAllPlayers.createCirclesAP(midX, midY, seasonData, manager.circleSize.r, manager.circleSize.spacing)
                 manager.setCirclesAP(newCircles);
 
-                let flags = VizAllPlayers.createFlagImages(newCircles, p);
-                manager.setFlagImages(flags);
+                // load flag images if null
+                if(manager.flagImages === null) {
+                    let flags = VizAllPlayers.createFlagImages(newCircles, p);
+                    manager.setFlagImages(flags);
+                }
             }
 
             let newCircles = this.createPlayersSplitClusters(midX, midY, manager.circlesAP, manager.circleSize.r, manager.circleSize.spacing)
@@ -87,94 +89,35 @@
             p.text('Total Players: ' + this.maxPlayers, manager.offsetX + 5, manager.offsetY + 55);
 
 
-            // p.circle(manager.offsetX + manager.width / 2, manager.offsetY + manager.height / 2, bigRadius * 2);
-
-            // p.line(xStart, yEnd, xStart, yStart);
-            // p.line(xEnd, yEnd, xEnd, yStart);
-
-            //let pixelsToMeter = xDistance / 13.42;
-
-            // let midX = (manager.offsetX || 0) + (manager.width || 600) / 2;
-            // let midY = (manager.offsetY || 0) + (manager.height || 520) / 2 + 40;
-            // let yStart = manager.offsetY;
-            // let yEnd = manager.offsetY + manager.height;
-            // let xStart = manager.offsetX;
-            // let xEnd = manager.offsetX + manager.width;
-
-            // let xDistance = xEnd - xStart;
-            // let pixelsToMeter = xDistance / 15;
-            // p.strokeWeight(2);
-            // p.stroke('grey')
-            // p.noFill();
-            // p.line(xStart, yEnd, xEnd, yEnd);
-            // // p.line(xStart, yEnd, xStart, yEnd - 10 * pixelsToMeter);
-            // // p.line(xEnd, yEnd, xEnd, yEnd - 10 * pixelsToMeter);
-            // p.line(xStart + pixelsToMeter * 0.9, yEnd, xStart + pixelsToMeter * 0.9, yEnd - 3.04* pixelsToMeter);
-            // p.line(xEnd - pixelsToMeter * 0.9, yEnd, xEnd - pixelsToMeter * 0.9, yEnd - 3.04 * pixelsToMeter);
-            // p.arc(midX, yEnd - 3.04 * pixelsToMeter, xDistance - pixelsToMeter * 0.9 * 2, 5.5 * pixelsToMeter * 2, p.PI, p.TWO_PI)
-            // p.line(midX - 4.9 * pixelsToMeter / 2, yEnd, midX - 4.9 * pixelsToMeter / 2, yEnd - 4.6 * pixelsToMeter);
-            // p.line(midX + 4.9 * pixelsToMeter / 2, yEnd, midX + 4.9 * pixelsToMeter / 2, yEnd - 4.6 * pixelsToMeter);
-            // p.line(midX - 4.9 * pixelsToMeter / 2, yEnd - 4.6 * pixelsToMeter, midX + 4.9 * pixelsToMeter / 2, yEnd - 4.6 * pixelsToMeter);
-            // p.arc(midX, yEnd - 4.6 * pixelsToMeter, 3.65 * pixelsToMeter, 1.8 * pixelsToMeter * 2, p.PI, p.TWO_PI)
-            // p.stroke('lightgrey')
-            // p.arc(midX, yEnd - 4.6 * pixelsToMeter, 3.65 * pixelsToMeter, 1.8 * pixelsToMeter * 2, p.TWO_PI, p.PI)
-
-
             p.strokeWeight(1);
             p.stroke('grey')
             p.fill('lightgrey');
 
+            let hoverCircle = null;
             for(let circle in manager.circlesPS.usa) {
                 let playerCircle = manager.circlesPS.usa[circle];
                 let newX = p.map(progress, 0.5, 1, manager.circlesAP[playerCircle.name].x, playerCircle.x);
                 let newY = p.map(progress, 0.5, 1, manager.circlesAP[playerCircle.name].y, playerCircle.y);
+                playerCircle = {...playerCircle, x: newX, y: newY};
 
 
-                p.circle(newX, newY, playerCircle.r);
-                if(manager.flagImages.has(playerCircle.country)) {
-
-                    // Written with AI
-                    // --- create circular clip ---
-                    p.drawingContext.save();
-                    p.drawingContext.beginPath();
-                    p.drawingContext.arc(newX, newY, playerCircle.r / 2, 0, Math.PI * 2);
-                    p.drawingContext.clip();
-
-                    // --- draw image inside circle ---
-                    // Make the image exactly fill the circle
-                    p.image(manager.flagImages.get(playerCircle.country), newX - playerCircle.r / 2, newY - playerCircle.r / 2, playerCircle.r, playerCircle.r);
-
-                    p.drawingContext.restore();
-                }
+                VizAllPlayers.drawCircle(playerCircle, p, manager.flagImages);
 
                 if (p.dist(p.mouseX, p.mouseY, newX, newY) < (playerCircle.r / 2 + 5)) {
-                    this.clickedCircle = {...playerCircle, x: newX, y: newY};
+                    hoverCircle = {...playerCircle, x: newX, y: newY};
                 }
             }
             for(let circle in manager.circlesPS.int) {
                 let playerCircle = manager.circlesPS.int[circle];
                 let newX = p.map(progress, 0.5, 1, manager.circlesAP[playerCircle.name].x, playerCircle.x);
                 let newY = p.map(progress, 0.5, 1, manager.circlesAP[playerCircle.name].y, playerCircle.y);
+                playerCircle = {...playerCircle, x: newX, y: newY};
 
 
-                p.circle(newX, newY, playerCircle.r);
-                if(manager.flagImages.has(playerCircle.country)) {
+                VizAllPlayers.drawCircle(playerCircle, p, manager.flagImages);
 
-                    // Written with AI
-                    // --- create circular clip ---
-                    p.drawingContext.save();
-                    p.drawingContext.beginPath();
-                    p.drawingContext.arc(newX, newY, playerCircle.r / 2, 0, Math.PI * 2);
-                    p.drawingContext.clip();
-
-                    // --- draw image inside circle ---
-                    // Make the image exactly fill the circle
-                    p.image(manager.flagImages.get(playerCircle.country), newX - playerCircle.r / 2, newY - playerCircle.r / 2, playerCircle.r, playerCircle.r);
-
-                    p.drawingContext.restore();
-                }
                 if (p.dist(p.mouseX, p.mouseY, newX, newY) < (playerCircle.r / 2 + 5)) {
-                    this.clickedCircle = {...playerCircle, x: newX, y: newY};
+                    hoverCircle = {...playerCircle, x: newX, y: newY};
                 }
             }
 
@@ -182,49 +125,12 @@
 
             p.fill('white');
             p.rect(manager.offsetX + manager.width - 250 - 5, manager.offsetY + 15, 250, 50);
-            // p.line(manager.offsetX + manager.width, manager.offsetY, manager.offsetX + manager.width, manager.offsetY + manager.height);
-            // p.line(manager.offsetX, manager.offsetY + manager.height, manager.offsetX, manager.offsetY);
 
-            p.fill('black');
-            p.textAlign(p.CENTER, p.CENTER);
-            if(this.clickedCircle != null) {
-                p.fill('red')
-                p.circle(this.clickedCircle.x, this.clickedCircle.y, this.clickedCircle.r + 5);
-                p.fill('black');
-                p.noStroke();
-                p.text(this.clickedCircle.name, manager.offsetX + manager.width - 125 - 5, manager.offsetY + 40);
-                if (p.dist(p.mouseX, p.mouseY, this.clickedCircle.x, this.clickedCircle.y) > (this.clickedCircle.r / 2 + 5)) {
-                    this.clickedCircle = null;
-                }
-            } else {
-                p.noStroke();
-                p.fill('grey');
-                p.text("Hover over a player", manager.offsetX + manager.width - 125 - 5, manager.offsetY + 40);
-
+            // Hover
+            if (hoverCircle !== null && p.dist(p.mouseX, p.mouseY, hoverCircle.x, hoverCircle.y) > (hoverCircle.r / 2 + 5)) {
+                hoverCircle = null;
             }
-            p.textAlign(p.LEFT, p.BASELINE);
-
-            // let bigRadius = manager.height * 0.46 - 2;
-            // let maxSpacing = Math.sqrt(p.PI * bigRadius * bigRadius / this.maxPlayers);
-            // let r = maxSpacing * 0.7;
-            // console.log(maxSpacing)
-            // let spacing = maxSpacing;
-            // let maxCountRows = Math.floor(bigRadius * 2 / spacing) //get the max amount of rows possible with spacing
-            // let minSpacingY = bigRadius * 2 / maxCountRows;
-            // p.randomSeed(999);
-            // let gap = spacing - r;
-            // let count = 0;
-            // for(let row = 0; row <= maxCountRows; row++) {
-            //     let y = minSpacingY / 2 + row * minSpacingY - bigRadius;
-            //     let maxX = Math.sqrt(bigRadius * bigRadius - y * y);
-            //     let maxCountCols = Math.floor(maxX * 2 / spacing);
-            //     let minSpacingX = (maxCountCols != 0 ? maxX * 2 / maxCountCols : 0);
-            //     for(let i = 0; i <= maxCountCols; i++) {
-            //         if(count + 1 > this.maxPlayers) break;
-            //         p.circle(midX - maxX + (minSpacingX * i) + p.random(-gap, gap), midY - y + p.random(-gap, gap), r);
-            //         count++;
-            //     }
-            // }
+            VizAllPlayers.handleHover(hoverCircle, p, manager);
 
 
             p.noStroke();

@@ -24,6 +24,7 @@
             p.textSize(20);
             p.textStyle(p.ITALIC);
             p.text('Diego Licea, Minkyu Kim, Lance Santos', cx, cy + 110);
+            p.pop();
         }
     };
 })();

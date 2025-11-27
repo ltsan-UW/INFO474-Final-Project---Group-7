@@ -40,6 +40,7 @@
                 p.textStyle(p.ITALIC)
                 p.text('(From left to right): Lauri Markannen (Finland), Nikola Jokić (Serbia),\n Giannis Antetokounmpo (Greece), Pascal Siakam (Cameroon)', cx - 30, cy + 360);
             }
+            p.pop();
             
         }
     };

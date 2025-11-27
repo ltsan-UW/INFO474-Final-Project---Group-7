@@ -21,10 +21,24 @@ function startP5() {
         // data will be attached by localRenderer.setData(manager, data)
         this.data = [];
 
+        // circle size r and spacing
+        this.circleSize = {
+            r: 11,
+            spacing: 15
+        };
+        // circle scatter strength 0 - 1
+        this.circleScatterStrength = 1;
+
         // circle objects for all players
         this.circlesAP = {};
         // circle objects for players split between international and domestic
         this.circlesPS = {};
+
+        // currentSeason that is used for all vizes
+        this.currentSeason = "2023-24"
+
+        // loaded player flag images to prevent reloading every viz
+        this.flagImages = null;
 
         // create the p5 instance bound to this manager
         var self = this;
@@ -53,6 +67,11 @@ function startP5() {
     // set circlesPS state (called by begininng all players viz)
     SketchManager.prototype.setCirclesPS = function (circles) {
         if (circles !== undefined) this.circlesPS = circles;
+    };
+
+    // set flags (called by begininng all players viz)
+    SketchManager.prototype.setFlagImages = function (flags) {
+        if (flags !== undefined) this.flagImages = flags;
     };
 
 

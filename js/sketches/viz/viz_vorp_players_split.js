@@ -84,8 +84,8 @@
 
             //const intTotalVORP = intPrevCircles.reduce((sum, c) => sum + p.map(c.VORP, minVORP, maxVORP, 11 / vorpMapWorse, 11 * vorpMapBest) * p.map(c.VORP, minVORP, maxVORP, 11 / vorpMapWorse, 11 * vorpMapBest) * Math.PI, 0);
             const usaTotalVORP = usaPrevCircles.reduce((sum, c) => sum + p.map(c.VORP, minVORP, maxVORP, 11 / vorpMapWorse, 11 * vorpMapBest) * p.map(c.VORP, minVORP, maxVORP, 11 / vorpMapWorse, 11 * vorpMapBest) * Math.PI, 0);
-            const usaBigRadius = Math.sqrt(usaTotalVORP / 2 / Math.PI);
 
+            const usaBigRadius = Math.sqrt(usaTotalVORP / 2 / Math.PI);
             // let intValues = createCluster(midX / 2, midY, r, spacing, intPrevCircles, minVORP, maxVORP, p, Math.sqrt(intTotalVORP / 2 / Math.PI));
             // let usaValues = createCluster(midX / 4 * 5.5, midY, r, spacing, usaPrevCircles, minVORP, maxVORP, p, Math.sqrt(usaTotalVORP / 2 / Math.PI));
             let intValues = createCluster(midX - usaBigRadius * 0.9 - 15, midY, intPrevCircles, minVORP, maxVORP, p, usaBigRadius * 0.85, manager.circleScatterStrength);
@@ -103,7 +103,7 @@
 
             p.noFill();
 
-            VizAllPlayers.drawHeader(p, manager.currentSeason, manager);
+            VizAllPlayers.drawHeader(p, manager.currentSeason, manager, this.maxPlayers);
 
             p.strokeWeight(1);
             p.stroke('grey')

@@ -78,7 +78,7 @@
             }
 
 
-            VizAllPlayers.drawHeader(p, manager.currentSeason, manager);
+            VizAllPlayers.drawHeader(p, manager.currentSeason, manager, this.maxPlayers);
 
 
             p.strokeWeight(1);

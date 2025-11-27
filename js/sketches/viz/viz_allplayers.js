@@ -102,7 +102,7 @@
                 this.preload(manager, p);
             }
 
-            this.drawHeader(p, manager.currentSeason, manager);
+            this.drawHeader(p, manager.currentSeason, manager, this.maxPlayers);
 
 
 
@@ -208,7 +208,7 @@
             p.textAlign(p.LEFT, p.BASELINE);
         },
 
-        drawHeader: function(p, season, manager) {
+        drawHeader: function(p, season, manager, maxPlayers) {
 
             p.stroke('grey')
             p.fill('white');
@@ -220,7 +220,7 @@
             p.text('NBA Season ' + season, manager.offsetX, manager.offsetY + 35);
             p.textSize(18);
             p.textStyle(p.NORMAL);
-            p.text('Total Players: ' + this.maxPlayers, manager.offsetX + 5, manager.offsetY + 55);
+            p.text('Total Players: ' + maxPlayers, manager.offsetX + 5, manager.offsetY + 55);
         }
     };
 

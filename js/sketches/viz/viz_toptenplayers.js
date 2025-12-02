@@ -1,12 +1,21 @@
-// viz_toptenplayers.js
 
 (function () {
     window.VizTopTenPlayers = {
-
         doneLoading: false,
         top10: [],
 
-        preload: function(manager){
+        preload: function(manager, p){
+            this.Jokic = p.loadImage("js/sketches/images/player_headshots/Nikola Jokic.png");
+            this.Doncic = p.loadImage("js/sketches/images/player_headshots/Luka Doncic.png");
+            this.Giannis = p.loadImage("js/sketches/images/player_headshots/Giannis Antetokounmpo.png");
+            this.GilgeousAlexander = p.loadImage("js/sketches/images/player_headshots/Shai Gilgeous-Alexander.png");
+            this.Sabonis = p.loadImage("js/sketches/images/player_headshots/Domantas Sabonis.png");
+            this.Brunson = p.loadImage("js/sketches/images/player_headshots/Jalen Brunson.png");
+            this.James = p.loadImage("js/sketches/images/player_headshots/LeBron James.png");
+            this.haliburton = p.loadImage("js/sketches/images/player_headshots/Tyrese Haliburton.png");
+            this.Davis = p.loadImage("js/sketches/images/player_headshots/Anthony Davis.png");
+            this.Tatum = p.loadImage("js/sketches/images/player_headshots/Jayson Tatum.png");
+            // Testing images
 
             let season2020 = manager.data["2023-24"]; // 2023 Season is placeholder for data visualization
 
@@ -25,12 +34,13 @@
             // Adds the stats of the top 10 players by VORP to the 'top10' array
             this.top10 = playerArray.slice(0, 10);
             this.isHovering = -1;
+
             this.doneLoading = true;
         },
         
         draw: function (p, manager, ai, progress) {
             if (!this.doneLoading){
-                VizTopTenPlayers.preload(manager);
+                VizTopTenPlayers.preload(manager, p);
             }
 
             var cx = (manager.offsetX || 0) + (manager.width || 600) / 2;
@@ -187,7 +197,7 @@
                     p.stroke("black");
 
                     let circleX = (baseX) + (x * 120);
-                    let circleY = (cy - 150) + (y * rowGap);
+                    let circleY = (baseY) + (y * rowGap);
                     let diam = 55;
 
                     // check if hovering over this circle
@@ -205,8 +215,31 @@
                             p.fill("purple"); // darken on hover
                         }
                     }
-                   
-                    p.circle(circleX, circleY, diam);
+
+                    p.square(circleX - 28, circleY - 25, diam, 5);
+
+                    let headshots = [
+                        { name: "Nikola Jokic", country: this.Jokic },
+                        { name: "Luka Doncic", country: this.Doncic },
+                        { name: "Giannis Antetokounmpo", country: this.Giannis },
+                        { name: "Shai Gilgeous-Alexander", country: this.GilgeousAlexander },
+                        { name: "Domantas Sabonis", country: this.Sabonis },
+                        { name: "Jalen Brunson", country: this.Brunson },
+                        { name: "LeBron James", country: this.James },
+                        { name: "Tyrese Haliburton", country: this.haliburton },
+                        { name: "Anthony Davis", country: this.Davis },
+                        { name: "Jayson Tatum", country: this.Tatum }
+                    ];
+
+                    if (circleDist <= diam / 2 || showAll == true) {
+                        p.imageMode(p.CENTER);0
+                        for (let name in headshots) {
+                            if (curPlayer.name === headshots[name].name) {
+                                p.image(headshots[name].country, circleX, circleY + 6, 50, 40);
+                            }
+                        }
+                        // p.image(this.Jokic, circleX, circleY + 6, 50, 40); // Placeholder image for testing
+                    }
                     
                     arrayCount++;
                 }

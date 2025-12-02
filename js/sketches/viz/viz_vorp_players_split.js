@@ -145,7 +145,7 @@
             if (hoverCircle !== null && p.dist(p.mouseX, p.mouseY, hoverCircle.x, hoverCircle.y) > (hoverCircle.r / 2 + 5)) {
                 hoverCircle = null;
             }
-            VizAllPlayers.handleHover(hoverCircle, p, manager);
+            VizAllPlayers.handleHover(hoverCircle, p, manager, true);
 
             p.noStroke();
             p.fill('black');

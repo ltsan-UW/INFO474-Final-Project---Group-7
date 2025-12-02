@@ -152,9 +152,11 @@
             }
         },
 
-        handleHover: function(hoverCircle, p, manager) {
+        handleHover: function(hoverCircle, p, manager, showVorp) {
+            p.stroke('grey')
+            p.fill('white');
+            p.rect(manager.offsetX + manager.width - 260 - 5, manager.offsetY + 15, 260, 50);
             p.fill('black');
-            p.textAlign(p.CENTER, p.CENTER);
             if(hoverCircle != null) {
                 p.cursor(p.HAND);
                 p.fill('grey');
@@ -165,30 +167,41 @@
                 let playerCircle = {...hoverCircle, r: hoverCircle.r * 2};
                 this.drawCircle(playerCircle, p, manager.flagImages);
                 p.fill('black');
+                if(manager.flagImages.has(playerCircle.country)) {
+                    p.imageMode(p.LEFT);
+                    p.stroke('grey');
+                    p.rect(manager.offsetX + manager.width - 260, manager.offsetY + 15 + 10, 40, 30);
+                    p.image(manager.flagImages.get(playerCircle.country), manager.offsetX + manager.width - 260, manager.offsetY + 15 + 10, 40, 30);
+                }
                 p.noStroke();
-                p.text(hoverCircle.name, manager.offsetX + manager.width - 125 - 5, manager.offsetY + 40);
+                p.textAlign(p.LEFT, p.TOP);
+                p.text(hoverCircle.name, manager.offsetX + manager.width - 212, manager.offsetY + 15 + 10);
+                p.textSize(13);
+                p.text(hoverCircle.country, manager.offsetX + manager.width - 212, manager.offsetY + 35 + 10);
+                if(showVorp) {
+                    p.textSize(11);
+                    p.text("VORP: " + hoverCircle.VORP, manager.offsetX + manager.width - 212 + (hoverCircle.country.length * 6) + 20, manager.offsetY + 35 + 11);
+                }
             } else {
                 p.cursor(p.ARROW);
                 p.noStroke();
                 p.fill('grey');
-                p.text("Hover over a player", manager.offsetX + manager.width - 125 - 5, manager.offsetY + 40);
+                p.textAlign(p.CENTER, p.CENTER);
+                p.text("Hover over a player", manager.offsetX + manager.width - 130 - 5, manager.offsetY + 40);
             }
             p.textAlign(p.LEFT, p.BASELINE);
         },
 
         drawHeader: function(p, season, manager, maxPlayers) {
-
-            p.stroke('grey')
-            p.fill('white');
-            p.rect(manager.offsetX + manager.width - 250 - 5, manager.offsetY + 15, 250, 50);
             p.noStroke();
             p.fill('black');
             p.textSize(20);
+            p.textAlign(p.LEFT, p.BASELINE);
             p.textStyle(p.BOLD);
             p.text('NBA Season ' + season, manager.offsetX, manager.offsetY + 35);
             p.textSize(18);
             p.textStyle(p.NORMAL);
-            p.text('Total Players: ' + maxPlayers, manager.offsetX + 5, manager.offsetY + 55);
+            p.text('Total Players: ' + maxPlayers, manager.offsetX, manager.offsetY + 57);
         }
     };
 

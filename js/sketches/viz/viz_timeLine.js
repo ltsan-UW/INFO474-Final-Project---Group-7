@@ -48,12 +48,13 @@
             let lineX1 = (cx - 69) - timelineWidth / 2;
             let lineX2 = cx + (timelineWidth / 2) - 10;
 
-           // rgba(193, 193, 193, 1)
+           // rgba(167, 51, 128, 1)
         
             // draw main line
             p.stroke(0);
             p.strokeWeight(40);
             p.stroke(31, 119, 180);
+            p.stroke("purple");
             p.line(lineX1, cy + 100, lineX2, cy + 100);
             p.noStroke();
             p.textSize(40)
@@ -78,7 +79,7 @@
                 let y = cy + 100;
 
                 // draw marker
-                p.fill(127, 187, 214);
+                p.fill(167, 51, 128);
                 p.circle(x, y, 18);
                 p.fill("white");
                 p.circle(x, y, 7);

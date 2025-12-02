@@ -75,7 +75,7 @@
             for (let i = 0; i < this.playerCounts.length; i++) {
                 let obj = this.playerCounts[i];
                 let percentage = 420 * (obj.Percentage/0.50);
-                p.stroke(13, 170, 209);
+                p.stroke("purple");
                 p.strokeWeight(4);
                 
                 //line logic
@@ -117,7 +117,7 @@
             
             //STEP 3: SUPPORTING TEXT -----------------------
 
-            p.text("Percentage of NBA players not from the United States", cx - 320, cy - 150);
+            p.text("Percentage of NBA players NOT from the United States", cx - 320, cy - 150);
             p.text("since the 1996-1997 Season to the 2023-2024 Season", cx - 320, cy - 120);
             p.textSize(18);
             p.textStyle(p.BOLD);

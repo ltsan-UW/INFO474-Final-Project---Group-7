@@ -87,7 +87,7 @@
 
             // Legend Title
             p.textSize(16);
-            p.text("Legend", cx, cx - 350);
+            p.text("Guess the Player", cx, cx - 350);
             p.textSize(12);
 
             // Legend Keys, USA and International

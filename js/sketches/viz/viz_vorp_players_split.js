@@ -10,7 +10,7 @@
         negativeLines: null,
         mouseClick: false,
 
-        preload: function(manager, p) {
+        preload: function (manager, p) {
 
             let midX = (manager.offsetX || 0) + (manager.width || 600) / 2;
             let midY = (manager.offsetY || 0) + (manager.height || 520) / 2 + 40;
@@ -28,24 +28,24 @@
                 let count = 0;
                 let yCurrDistance = -bigRadius + 10;
                 let rowCount = 1;
-                while(count < prevCircles.length && yCurrDistance < maxY) {
+                while (count < prevCircles.length && yCurrDistance < maxY) {
                     let maxR = Math.sqrt(bigRadius * bigRadius - yCurrDistance * yCurrDistance);
                     let maxX = Math.sqrt(bigRadius * bigRadius - yCurrDistance * yCurrDistance) * 2;
                     let xCurrDistance = 0;
                     let largestR = 1;
                     let minR = 13 * vorpMapBest;
-                    while(count < prevCircles.length && xCurrDistance < maxX) {
+                    while (count < prevCircles.length && xCurrDistance < maxX) {
 
                         let currCircle = prevCircles[count];
                         let newR = p.map(currCircle.VORP, minVORP, maxVORP, 0.5, currCircle.r * vorpMapBest);
                         let gap = p.map(p.constrain(newR, 0.5, 10), 0.5, 13, 0.1, 2.5 * scatterStrength);
                         let y = (centerY - yCurrDistance + (Math.random() * gap * 2 - gap));
                         let newY = seperateNegatives ? (currCircle.VORP <= 0 ? y - negGap : y) : y;
-                        let x = -maxR + xCurrDistance +  (Math.random() * gap * 2 - gap);
+                        let x = -maxR + xCurrDistance + (Math.random() * gap * 2 - gap);
                         let newX = (rowCount % 2 == 1) ? centerX + x : centerX - x;
-                        if(seperateNegatives && negativeLine == null && currCircle.VORP <= 0) {
+                        if (seperateNegatives && negativeLine == null && currCircle.VORP <= 0) {
                             console.log("negline loaded")
-                            negativeLine = {x: centerX - maxR, y: newY + negGap / 2, x2: centerX + maxR};
+                            negativeLine = { x: centerX - maxR, y: newY + negGap / 2, x2: centerX + maxR };
                         }
                         newCircles[currCircle.name] = {
                             x: newX,
@@ -56,8 +56,8 @@
                             international: currCircle.international,
                             country: currCircle.country
                         };
-                        if(largestR < newR) largestR = newR;
-                        if(minR > newR) minR = newR;
+                        if (largestR < newR) largestR = newR;
+                        if (minR > newR) minR = newR;
                         minR = newR;
                         xCurrDistance += newR;
                         count++;
@@ -67,18 +67,18 @@
                     rowCount++;
                 }
 
-                return {circles: newCircles, negativeLine: negativeLine};
+                return { circles: newCircles, negativeLine: negativeLine };
             }
 
 
             // load all players circles data from viz 1 and/or 2 if null
-            if(!manager.circlesPS || Object.keys(manager.circlesPS).length === 0) {
-                if(!manager.circlesAP || Object.keys(manager.circlesAP).length === 0) {
+            if (!manager.circlesPS || Object.keys(manager.circlesPS).length === 0) {
+                if (!manager.circlesAP || Object.keys(manager.circlesAP).length === 0) {
                     let newCircles = VizAllPlayers.createCirclesAP(midX, midY, seasonData, manager.circleSize.r, manager.circleSize.spacing, manager.circleScatterStrength)
                     manager.setCirclesAP(newCircles);
 
                     // load flag images if null
-                    if(manager.flagImages === null) {
+                    if (manager.flagImages === null) {
                         let flags = VizAllPlayers.createFlagImages(newCircles, p);
                         manager.setFlagImages(flags);
                     }
@@ -99,13 +99,33 @@
             const usaPrevCircles = Object.values(manager.circlesPS.usa)
                 .sort((a, b) => b.VORP - a.VORP);  // highest → lowest
 
+            // this finds the median of both international and usa.
+            // function medianPositiveVORP(arr) {
+            //     // keep only items with VORP > 0
+            //     const positives = arr.filter(x => x.VORP > 0);
+
+            //     const n = positives.length;
+            //     if (n === 0) return null;
+
+            //     const mid = Math.floor(n / 2);
+
+            //     if (n % 2 === 1) {
+            //         return positives[mid].VORP;  // odd → middle VORP
+            //     } else {
+            //         return (positives[mid - 1].VORP + positives[mid].VORP) / 2;
+            //     }
+            // }
+
+            // const intMedianVORP = medianPositiveVORP(intPrevCircles);
+            // const usaMedianVORP = medianPositiveVORP(usaPrevCircles);
+            // console.log(intMedianVORP);
+            // console.log(usaMedianVORP);
+
             //const intTotalVORP = intPrevCircles.reduce((sum, c) => sum + p.map(c.VORP, minVORP, maxVORP, 11 / vorpMapWorse, 11 * vorpMapBest) * p.map(c.VORP, minVORP, maxVORP, 11 / vorpMapWorse, 11 * vorpMapBest) * Math.PI, 0);
             const usaMappedTotalVORP = usaPrevCircles.reduce((sum, c) => sum + p.map(c.VORP, minVORP, maxVORP, 0.5, 13 * vorpMapBest) * p.map(c.VORP, minVORP, maxVORP, 11 / vorpMapWorse, 11 * vorpMapBest) * Math.PI, 0);
 
-            const usaTotalVORP = usaPrevCircles.reduce((sum, c) => sum + ((c.VORP > 0) ? c.VORP : 0), 0);
-            console.log(usaTotalVORP);
-            const intTotalVORP = intPrevCircles.reduce((sum, c) => sum + ((c.VORP > 0) ? c.VORP : 0), 0);
-            console.log(intTotalVORP);
+            // const usaTotalVORP = usaPrevCircles.reduce((sum, c) => sum + ((c.VORP > 0) ? c.VORP : 0), 0);
+            // const intTotalVORP = intPrevCircles.reduce((sum, c) => sum + ((c.VORP > 0) ? c.VORP : 0), 0);
 
             const usaBigRadius = Math.sqrt(usaMappedTotalVORP / 2 / Math.PI);
             // let intValues = createCluster(midX / 2, midY, r, spacing, intPrevCircles, minVORP, maxVORP, p, Math.sqrt(intTotalVORP / 2 / Math.PI));
@@ -114,14 +134,14 @@
             let usaValues = createCluster(midX + usaBigRadius * 0.9 + 15, midY - 20, usaPrevCircles, minVORP, maxVORP, p, usaBigRadius * 0.85, manager.circleScatterStrength, true);
 
             console.log(intValues)
-            this.circlesVorpPS = {int: intValues.circles, usa: usaValues.circles};
-            this.negativeLines = {int: intValues.negativeLine, usa: usaValues.negativeLine};
+            this.circlesVorpPS = { int: intValues.circles, usa: usaValues.circles };
+            this.negativeLines = { int: intValues.negativeLine, usa: usaValues.negativeLine };
 
             this.doneLoading = true;
         },
 
         draw: function (p, manager, ai, progress) {
-            if(!this.doneLoading) {
+            if (!this.doneLoading) {
                 this.preload(manager, p);
             }
 
@@ -137,12 +157,12 @@
 
 
             //Draw circles: usa, then international
-            for(let circle in this.circlesVorpPS.usa) {
+            for (let circle in this.circlesVorpPS.usa) {
                 let playerCircle = this.circlesVorpPS.usa[circle];
                 let newX = p.map(p.constrain(progress, 0.5, 0.62), 0.5, 0.62, manager.circlesPS.usa[playerCircle.name].x, playerCircle.x);
                 let newY = p.map(p.constrain(progress, 0.5, 0.62), 0.5, 0.62, manager.circlesPS.usa[playerCircle.name].y, playerCircle.y);
                 let newR = p.map(p.constrain(progress, 0.5, 0.62), 0.5, 0.62, manager.circlesPS.usa[playerCircle.name].r, playerCircle.r);
-                playerCircle = {...playerCircle, x: newX, y: newY, r: newR};
+                playerCircle = { ...playerCircle, x: newX, y: newY, r: newR };
 
                 VizAllPlayers.drawCircle(playerCircle, p, manager.flagImages);
 
@@ -150,12 +170,12 @@
                     hoverCircle = playerCircle;
                 }
             }
-            for(let circle in this.circlesVorpPS.int) {
+            for (let circle in this.circlesVorpPS.int) {
                 let playerCircle = this.circlesVorpPS.int[circle];
                 let newX = p.map(p.constrain(progress, 0.5, 0.62), 0.5, 0.62, manager.circlesPS.int[playerCircle.name].x, playerCircle.x);
                 let newY = p.map(p.constrain(progress, 0.5, 0.62), 0.5, 0.62, manager.circlesPS.int[playerCircle.name].y, playerCircle.y);
                 let newR = p.map(p.constrain(progress, 0.5, 0.62), 0.5, 0.62, manager.circlesPS.int[playerCircle.name].r, playerCircle.r);
-                playerCircle = {...playerCircle, x: newX, y: newY, r: newR};
+                playerCircle = { ...playerCircle, x: newX, y: newY, r: newR };
 
                 VizAllPlayers.drawCircle(playerCircle, p, manager.flagImages);
 
@@ -190,13 +210,13 @@
             let transparency = p.map(p.constrain(progress, 0.5, 0.62), 0.5, 0.62, 0, 255);
             p.strokeWeight(5);
             p.stroke(211, 211, 211, transparency);
-            if(this.negativeLines.usa !== null) {
+            if (this.negativeLines.usa !== null) {
                 let usaLine = this.negativeLines.usa;
-                dashedLine(p, usaLine.x, usaLine.y,usaLine.x2, usaLine.y, 5, 10);
+                dashedLine(p, usaLine.x, usaLine.y, usaLine.x2, usaLine.y, 5, 10);
             }
-            if(this.negativeLines.int !== null) {
+            if (this.negativeLines.int !== null) {
                 let intLine = this.negativeLines.int;
-                dashedLine(p, intLine.x, intLine.y,intLine.x2, intLine.y, 5, 10);
+                dashedLine(p, intLine.x, intLine.y, intLine.x2, intLine.y, 5, 10);
                 p.strokeWeight(0);
                 p.fill(150, 150, 150, transparency);
                 p.textSize(10);

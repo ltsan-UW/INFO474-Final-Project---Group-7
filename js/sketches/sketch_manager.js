@@ -24,7 +24,7 @@ function startP5() {
         // circle size r and spacing
         this.circleSize = {
             r: 11,
-            spacing: 15
+            spacing: 15.5
         };
         // circle scatter strength 0 - 1
         this.circleScatterStrength = 1;

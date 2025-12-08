@@ -23,7 +23,7 @@
                 }
             }
 
-            let newCircles = this.createPlayersSplitClusters(midX, midY, manager.circlesAP, manager.circleSize.r, manager.circleSize.spacing, manager.circleScatterStrength)
+            let newCircles = this.createPlayersSplitClusters(midX, midY - 22, manager.circlesAP, manager.circleSize.r, manager.circleSize.spacing, manager.circleScatterStrength)
             manager.setCirclesPS(newCircles);
 
             this.doneLoading = true;
@@ -118,6 +118,26 @@
                 hoverCircle = null;
             }
             VizAllPlayers.handleHover(hoverCircle, p, manager);
+
+
+            let midX = (manager.offsetX || 0) + (manager.width || 600) / 2;
+            let midY = (manager.offsetY || 0) + (manager.height || 520) / 2;
+
+            p.textAlign(p.CENTER, p.CENTER);
+            p.fill('grey')
+            p.textSize(18);
+
+            // original text location
+            let ogX = midX;
+            let ogY = midY + 275;
+            let newX = p.map(p.constrain(progress, 0.5, 0.8), 0.5, 0.8, ogX, midX + 115);
+            let newY = p.map(p.constrain(progress, 0.5, 0.8), 0.5, 0.8, ogY, midY + 235);
+            p.text("437 players", newX, newY);
+
+            newX = p.map(p.constrain(progress, 0.5, 0.8), 0.5, 0.8, ogX, midX - 200);
+            newY = p.map(p.constrain(progress, 0.5, 0.8), 0.5, 0.8, ogY, midY + 145);
+            p.text("133 players", newX, newY);
+            p.textAlign(p.LEFT, p.BASELINE);
 
 
             p.noStroke();

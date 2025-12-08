@@ -36,7 +36,7 @@
             this.doneLoading = true;
         },
 
-        createFlagImages: function(circles, p,) {
+        createFlagImages: function(circles, p) {
             let flags = new Map();
             for(let name in circles) {
                 if(!flags.has(circles[name].country)) {
@@ -94,10 +94,13 @@
                     count++;
                 }
             }
+            if(count !== 570) {
+                console.error("ERROR: " + count + " is not 570 players");
+            }
             return circles;
         },
 
-        draw: function (p, manager, ai, progress) {
+        draw: function (p, manager) {
             if(!this.doneLoading) {
                 this.preload(manager, p);
             }
@@ -129,6 +132,14 @@
 
             p.noStroke();
             p.fill('black');
+
+            let midX = (manager.offsetX || 0) + (manager.width || 600) / 2;
+            let midY = (manager.offsetY || 0) + (manager.height || 520) / 2;
+            p.textAlign(p.CENTER, p.CENTER);
+            p.fill('grey')
+            p.text("570 players", midX, midY + 275);
+            p.textAlign(p.LEFT, p.BASELINE);
+
         },
 
         drawCircle: function(playerCircle, p, flagImages) {

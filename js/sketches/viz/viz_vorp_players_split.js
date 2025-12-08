@@ -38,7 +38,7 @@
 
                         let currCircle = prevCircles[count];
                         let newR = p.map(currCircle.VORP, minVORP, maxVORP, 0.5, currCircle.r * vorpMapBest);
-                        let gap = p.map(p.constrain(newR, 0.5, 10), 0.5, 13, 0.1, 2 * scatterStrength);
+                        let gap = p.map(p.constrain(newR, 0.5, 10), 0.5, 13, 0.1, 2.5 * scatterStrength);
                         let y = (centerY - yCurrDistance + (Math.random() * gap * 2 - gap));
                         let newY = seperateNegatives ? (currCircle.VORP <= 0 ? y - negGap : y) : y;
                         let x = -maxR + xCurrDistance +  (Math.random() * gap * 2 - gap);
@@ -110,8 +110,8 @@
             const usaBigRadius = Math.sqrt(usaMappedTotalVORP / 2 / Math.PI);
             // let intValues = createCluster(midX / 2, midY, r, spacing, intPrevCircles, minVORP, maxVORP, p, Math.sqrt(intTotalVORP / 2 / Math.PI));
             // let usaValues = createCluster(midX / 4 * 5.5, midY, r, spacing, usaPrevCircles, minVORP, maxVORP, p, Math.sqrt(usaTotalVORP / 2 / Math.PI));
-            let intValues = createCluster(midX - usaBigRadius * 0.9 - 15, midY - 7 - 30, intPrevCircles, minVORP, maxVORP, p, usaBigRadius * 0.85, manager.circleScatterStrength, true);
-            let usaValues = createCluster(midX + usaBigRadius * 0.9 + 15, midY - 30, usaPrevCircles, minVORP, maxVORP, p, usaBigRadius * 0.85, manager.circleScatterStrength, true);
+            let intValues = createCluster(midX - usaBigRadius * 0.9 - 15, midY - 8.5 - 20, intPrevCircles, minVORP, maxVORP, p, usaBigRadius * 0.85, manager.circleScatterStrength, true);
+            let usaValues = createCluster(midX + usaBigRadius * 0.9 + 15, midY - 20, usaPrevCircles, minVORP, maxVORP, p, usaBigRadius * 0.85, manager.circleScatterStrength, true);
 
             console.log(intValues)
             this.circlesVorpPS = {int: intValues.circles, usa: usaValues.circles};
@@ -166,25 +166,25 @@
 
             // Written with AI: Function to draw a dashed line between two points
             function dashedLine(p, x1, y1, x2, y2, dashLength = 5, gapLength = 5) {
-            // Calculate total distance between points
-            let distance = p.dist(x1, y1, x2, y2);
+                // Calculate total distance between points
+                let distance = p.dist(x1, y1, x2, y2);
 
-            // Calculate direction vector
-            let dx = (x2 - x1) / distance;
-            let dy = (y2 - y1) / distance;
+                // Calculate direction vector
+                let dx = (x2 - x1) / distance;
+                let dy = (y2 - y1) / distance;
 
-            // Loop through and draw dashes
-            let progress = 0;
-            while (progress < distance) {
-                let xStart = x1 + dx * progress;
-                let yStart = y1 + dy * progress;
-                progress += dashLength;
-                if (progress > distance) progress = distance;
-                let xEnd = x1 + dx * progress;
-                let yEnd = y1 + dy * progress;
-                p.line(xStart, yStart, xEnd, yEnd);
-                progress += gapLength;
-            }
+                // Loop through and draw dashes
+                let progress = 0;
+                while (progress < distance) {
+                    let xStart = x1 + dx * progress;
+                    let yStart = y1 + dy * progress;
+                    progress += dashLength;
+                    if (progress > distance) progress = distance;
+                    let xEnd = x1 + dx * progress;
+                    let yEnd = y1 + dy * progress;
+                    p.line(xStart, yStart, xEnd, yEnd);
+                    progress += gapLength;
+                }
             }
 
             let transparency = p.map(p.constrain(progress, 0.5, 0.62), 0.5, 0.62, 0, 255);
@@ -214,6 +214,39 @@
                 hoverCircle = null;
             }
             VizAllPlayers.handleHover(hoverCircle, p, manager, true);
+
+
+
+            let midX = (manager.offsetX || 0) + (manager.width || 600) / 2;
+            let midY = (manager.offsetY || 0) + (manager.height || 520) / 2;
+
+            p.textAlign(p.CENTER, p.CENTER);
+            p.textWrap(p.WORD);
+            p.fill(150, 150, 150);
+            p.textSize(16);
+
+            // original text location
+            let ogX1 = midX + 115 - 65;
+            let ogY1 = midY + 235 - 20;
+            let newX = p.map(p.constrain(progress, 0.5, 0.62), 0.5, 0.62, ogX1, midX + 155 - 65);
+            let newY = p.map(p.constrain(progress, 0.5, 0.62), 0.5, 0.62, ogY1, midY + 180);
+            p.text("249.8 total positive VORP", newX, newY, 130, 50);
+
+            //-44.6
+            //-12.9
+
+            let ogX2 = midX - 200 - 65;
+            let ogY2 = midY + 145 - 20;
+            newX = p.map(p.constrain(progress, 0.5, 0.62), 0.5, 0.62, ogX2, midX - 155 - 65);
+            newY = p.map(p.constrain(progress, 0.5, 0.62), 0.5, 0.62, ogY2, midY + 180);
+            p.text("107.6 total positive VORP", newX, newY, 130, 50);
+
+            p.textWrap(p.WORD);
+            p.fill(150, 150, 150, transparency);
+            p.textSize(10);
+            p.text("-44.6 total negative VORP", midX + 155, midY - 120);
+            p.text("-12.9 total negative VORP", midX - 155, midY - 45);
+            p.textAlign(p.LEFT, p.BASELINE);
 
             p.noStroke();
             p.fill('black');

@@ -25,26 +25,30 @@
                 let negGap = 50;
 
                 let maxY = bigRadius * 2;
-                let gap = 2 * scatterStrength;
                 let count = 0;
-                let yCurrDistance = -bigRadius;
+                let yCurrDistance = -bigRadius + 10;
+                let rowCount = 1;
                 while(count < prevCircles.length && yCurrDistance < maxY) {
                     let maxR = Math.sqrt(bigRadius * bigRadius - yCurrDistance * yCurrDistance);
                     let maxX = Math.sqrt(bigRadius * bigRadius - yCurrDistance * yCurrDistance) * 2;
                     let xCurrDistance = 0;
                     let largestR = 1;
+                    let minR = 13 * vorpMapBest;
                     while(count < prevCircles.length && xCurrDistance < maxX) {
 
                         let currCircle = prevCircles[count];
                         let newR = p.map(currCircle.VORP, minVORP, maxVORP, 0.5, currCircle.r * vorpMapBest);
+                        let gap = p.map(p.constrain(newR, 0.5, 10), 0.5, 13, 0.1, 2 * scatterStrength);
                         let y = (centerY - yCurrDistance + (Math.random() * gap * 2 - gap));
-                        let newY = seperateNegatives ? (currCircle.VORP < 0 ? y - negGap : y) : y;
-                        if(seperateNegatives && negativeLine == null && currCircle.VORP < 0) {
+                        let newY = seperateNegatives ? (currCircle.VORP <= 0 ? y - negGap : y) : y;
+                        let x = -maxR + xCurrDistance +  (Math.random() * gap * 2 - gap);
+                        let newX = (rowCount % 2 == 1) ? centerX + x : centerX - x;
+                        if(seperateNegatives && negativeLine == null && currCircle.VORP <= 0) {
                             console.log("negline loaded")
                             negativeLine = {x: centerX - maxR, y: newY + negGap / 2, x2: centerX + maxR};
                         }
                         newCircles[currCircle.name] = {
-                            x: centerX - maxR + xCurrDistance +  (Math.random() * gap * 2 - gap),
+                            x: newX,
                             y: newY,
                             r: newR,
                             VORP: currCircle.VORP,
@@ -53,10 +57,14 @@
                             country: currCircle.country
                         };
                         if(largestR < newR) largestR = newR;
+                        if(minR > newR) minR = newR;
+                        minR = newR;
                         xCurrDistance += newR;
                         count++;
                     }
-                    yCurrDistance += largestR;
+                    console.log(minR + " | " + largestR)
+                    yCurrDistance += (minR > 30) ? minR : (largestR + minR) / 2;
+                    rowCount++;
                 }
 
                 return {circles: newCircles, negativeLine: negativeLine};
@@ -92,13 +100,18 @@
                 .sort((a, b) => b.VORP - a.VORP);  // highest → lowest
 
             //const intTotalVORP = intPrevCircles.reduce((sum, c) => sum + p.map(c.VORP, minVORP, maxVORP, 11 / vorpMapWorse, 11 * vorpMapBest) * p.map(c.VORP, minVORP, maxVORP, 11 / vorpMapWorse, 11 * vorpMapBest) * Math.PI, 0);
-            const usaTotalVORP = usaPrevCircles.reduce((sum, c) => sum + p.map(c.VORP, minVORP, maxVORP, 11 / vorpMapWorse, 11 * vorpMapBest) * p.map(c.VORP, minVORP, maxVORP, 11 / vorpMapWorse, 11 * vorpMapBest) * Math.PI, 0);
+            const usaMappedTotalVORP = usaPrevCircles.reduce((sum, c) => sum + p.map(c.VORP, minVORP, maxVORP, 0.5, 13 * vorpMapBest) * p.map(c.VORP, minVORP, maxVORP, 11 / vorpMapWorse, 11 * vorpMapBest) * Math.PI, 0);
 
-            const usaBigRadius = Math.sqrt(usaTotalVORP / 2 / Math.PI);
+            const usaTotalVORP = usaPrevCircles.reduce((sum, c) => sum + ((c.VORP > 0) ? c.VORP : 0), 0);
+            console.log(usaTotalVORP);
+            const intTotalVORP = intPrevCircles.reduce((sum, c) => sum + ((c.VORP > 0) ? c.VORP : 0), 0);
+            console.log(intTotalVORP);
+
+            const usaBigRadius = Math.sqrt(usaMappedTotalVORP / 2 / Math.PI);
             // let intValues = createCluster(midX / 2, midY, r, spacing, intPrevCircles, minVORP, maxVORP, p, Math.sqrt(intTotalVORP / 2 / Math.PI));
             // let usaValues = createCluster(midX / 4 * 5.5, midY, r, spacing, usaPrevCircles, minVORP, maxVORP, p, Math.sqrt(usaTotalVORP / 2 / Math.PI));
-            let intValues = createCluster(midX - usaBigRadius * 0.9 - 15, midY - 7, intPrevCircles, minVORP, maxVORP, p, usaBigRadius * 0.85, manager.circleScatterStrength, true);
-            let usaValues = createCluster(midX + usaBigRadius * 0.9 + 15, midY, usaPrevCircles, minVORP, maxVORP, p, usaBigRadius * 0.85, manager.circleScatterStrength, true);
+            let intValues = createCluster(midX - usaBigRadius * 0.9 - 15, midY - 7 - 30, intPrevCircles, minVORP, maxVORP, p, usaBigRadius * 0.85, manager.circleScatterStrength, true);
+            let usaValues = createCluster(midX + usaBigRadius * 0.9 + 15, midY - 30, usaPrevCircles, minVORP, maxVORP, p, usaBigRadius * 0.85, manager.circleScatterStrength, true);
 
             console.log(intValues)
             this.circlesVorpPS = {int: intValues.circles, usa: usaValues.circles};
@@ -175,8 +188,8 @@
             }
 
             let transparency = p.map(p.constrain(progress, 0.5, 0.62), 0.5, 0.62, 0, 255);
-            p.stroke(211, 211, 211, transparency);
             p.strokeWeight(5);
+            p.stroke(211, 211, 211, transparency);
             if(this.negativeLines.usa !== null) {
                 let usaLine = this.negativeLines.usa;
                 dashedLine(p, usaLine.x, usaLine.y,usaLine.x2, usaLine.y, 5, 10);
@@ -184,9 +197,16 @@
             if(this.negativeLines.int !== null) {
                 let intLine = this.negativeLines.int;
                 dashedLine(p, intLine.x, intLine.y,intLine.x2, intLine.y, 5, 10);
+                p.strokeWeight(0);
+                p.fill(150, 150, 150, transparency);
+                p.textSize(10);
+                p.textWrap(p.WORD);
+                p.text("Players above line have ≤ 0 VORP", intLine.x - 70, intLine.y - 50, 60);
+
+                p.strokeWeight(1);
+                p.stroke('grey');
+                p.textSize(18);
             }
-            p.strokeWeight(1);
-            p.stroke('grey')
 
 
             // Hover

@@ -7,6 +7,7 @@
         doneLoading: false,
         maxPlayers: 0,
         circlesVorpPS: null,
+        negativeLines: null,
         mouseClick: false,
 
         preload: function(manager, p) {
@@ -15,14 +16,16 @@
             let midY = (manager.offsetY || 0) + (manager.height || 520) / 2 + 40;
             let seasonData = manager.data[manager.currentSeason];
             this.maxPlayers = Object.keys(seasonData).length;
-            const vorpMapWorse = 4;
-            const vorpMapBest = 4;
+            const vorpMapWorse = 10;
+            const vorpMapBest = 10.6 / 2.5;
 
-            function createCluster(centerX, centerY, prevCircles, minVORP, maxVORP, p, bigRadius, scatterStrength) {
+            function createCluster(centerX, centerY, prevCircles, minVORP, maxVORP, p, bigRadius, scatterStrength, seperateNegatives) {
                 let newCircles = {};
+                let negativeLine = null;
+                let negGap = 50;
 
                 let maxY = bigRadius * 2;
-                let gap = 3 * scatterStrength;
+                let gap = 2 * scatterStrength;
                 let count = 0;
                 let yCurrDistance = -bigRadius;
                 while(count < prevCircles.length && yCurrDistance < maxY) {
@@ -33,10 +36,16 @@
                     while(count < prevCircles.length && xCurrDistance < maxX) {
 
                         let currCircle = prevCircles[count];
-                        let newR = p.map(currCircle.VORP, minVORP, maxVORP, currCircle.r / vorpMapWorse, currCircle.r * vorpMapBest);
+                        let newR = p.map(currCircle.VORP, minVORP, maxVORP, 0.5, currCircle.r * vorpMapBest);
+                        let y = (centerY - yCurrDistance + (Math.random() * gap * 2 - gap));
+                        let newY = seperateNegatives ? (currCircle.VORP < 0 ? y - negGap : y) : y;
+                        if(seperateNegatives && negativeLine == null && currCircle.VORP < 0) {
+                            console.log("negline loaded")
+                            negativeLine = {x: centerX - maxR, y: newY + negGap / 2, x2: centerX + maxR};
+                        }
                         newCircles[currCircle.name] = {
                             x: centerX - maxR + xCurrDistance +  (Math.random() * gap * 2 - gap),
-                            y: centerY - yCurrDistance + (Math.random() * gap * 2 - gap),
+                            y: newY,
                             r: newR,
                             VORP: currCircle.VORP,
                             name: currCircle.name,
@@ -50,7 +59,7 @@
                     yCurrDistance += largestR;
                 }
 
-                return newCircles;
+                return {circles: newCircles, negativeLine: negativeLine};
             }
 
 
@@ -88,10 +97,12 @@
             const usaBigRadius = Math.sqrt(usaTotalVORP / 2 / Math.PI);
             // let intValues = createCluster(midX / 2, midY, r, spacing, intPrevCircles, minVORP, maxVORP, p, Math.sqrt(intTotalVORP / 2 / Math.PI));
             // let usaValues = createCluster(midX / 4 * 5.5, midY, r, spacing, usaPrevCircles, minVORP, maxVORP, p, Math.sqrt(usaTotalVORP / 2 / Math.PI));
-            let intValues = createCluster(midX - usaBigRadius * 0.9 - 15, midY, intPrevCircles, minVORP, maxVORP, p, usaBigRadius * 0.85, manager.circleScatterStrength);
-            let usaValues = createCluster(midX + usaBigRadius * 0.9 + 15, midY, usaPrevCircles, minVORP, maxVORP, p, usaBigRadius * 0.85, manager.circleScatterStrength);
+            let intValues = createCluster(midX - usaBigRadius * 0.9 - 15, midY - 7, intPrevCircles, minVORP, maxVORP, p, usaBigRadius * 0.85, manager.circleScatterStrength, true);
+            let usaValues = createCluster(midX + usaBigRadius * 0.9 + 15, midY, usaPrevCircles, minVORP, maxVORP, p, usaBigRadius * 0.85, manager.circleScatterStrength, true);
 
-            this.circlesVorpPS = {int: intValues, usa: usaValues};
+            console.log(intValues)
+            this.circlesVorpPS = {int: intValues.circles, usa: usaValues.circles};
+            this.negativeLines = {int: intValues.negativeLine, usa: usaValues.negativeLine};
 
             this.doneLoading = true;
         },
@@ -139,6 +150,43 @@
                     hoverCircle = playerCircle;
                 }
             }
+
+            // Written with AI: Function to draw a dashed line between two points
+            function dashedLine(p, x1, y1, x2, y2, dashLength = 5, gapLength = 5) {
+            // Calculate total distance between points
+            let distance = p.dist(x1, y1, x2, y2);
+
+            // Calculate direction vector
+            let dx = (x2 - x1) / distance;
+            let dy = (y2 - y1) / distance;
+
+            // Loop through and draw dashes
+            let progress = 0;
+            while (progress < distance) {
+                let xStart = x1 + dx * progress;
+                let yStart = y1 + dy * progress;
+                progress += dashLength;
+                if (progress > distance) progress = distance;
+                let xEnd = x1 + dx * progress;
+                let yEnd = y1 + dy * progress;
+                p.line(xStart, yStart, xEnd, yEnd);
+                progress += gapLength;
+            }
+            }
+
+            let transparency = p.map(p.constrain(progress, 0.5, 0.62), 0.5, 0.62, 0, 255);
+            p.stroke(211, 211, 211, transparency);
+            p.strokeWeight(5);
+            if(this.negativeLines.usa !== null) {
+                let usaLine = this.negativeLines.usa;
+                dashedLine(p, usaLine.x, usaLine.y,usaLine.x2, usaLine.y, 5, 10);
+            }
+            if(this.negativeLines.int !== null) {
+                let intLine = this.negativeLines.int;
+                dashedLine(p, intLine.x, intLine.y,intLine.x2, intLine.y, 5, 10);
+            }
+            p.strokeWeight(1);
+            p.stroke('grey')
 
 
             // Hover

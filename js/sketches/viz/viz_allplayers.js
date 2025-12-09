@@ -133,6 +133,7 @@
             p.noStroke();
             p.fill('black');
 
+            p.textSize(18);
             let midX = (manager.offsetX || 0) + (manager.width || 600) / 2;
             let midY = (manager.offsetY || 0) + (manager.height || 520) / 2;
             p.textAlign(p.CENTER, p.CENTER);

@@ -25,6 +25,17 @@
   color: #767678;
 }
 
+
+.cluster-playersplit-viz {
+  padding-top: 200px;
+  margin-bottom: 0px;
+
+}
+.cluster-VORP-viz {
+  padding-top: 400px;
+  padding-bottom: 0px;
+}
+
 #sections .title {
   font-family: Arial,Helvetica,"san-serif";
   font-size: 16px;

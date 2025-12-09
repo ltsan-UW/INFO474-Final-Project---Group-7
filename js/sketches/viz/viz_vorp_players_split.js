@@ -44,7 +44,6 @@
                         let x = -maxR + xCurrDistance + (Math.random() * gap * 2 - gap);
                         let newX = (rowCount % 2 == 1) ? centerX + x : centerX - x;
                         if (seperateNegatives && negativeLine == null && currCircle.VORP <= 0) {
-                            console.log("negline loaded")
                             negativeLine = { x: centerX - maxR, y: newY + negGap / 2, x2: centerX + maxR };
                         }
                         newCircles[currCircle.name] = {
@@ -62,7 +61,6 @@
                         xCurrDistance += newR;
                         count++;
                     }
-                    console.log(minR + " | " + largestR)
                     yCurrDistance += (minR > 30) ? minR : (largestR + minR) / 2;
                     rowCount++;
                 }
@@ -133,7 +131,6 @@
             let intValues = createCluster(midX - usaBigRadius * 0.9 - 15, midY - 8.5 - 20, intPrevCircles, minVORP, maxVORP, p, usaBigRadius * 0.85, manager.circleScatterStrength, true);
             let usaValues = createCluster(midX + usaBigRadius * 0.9 + 15, midY - 20, usaPrevCircles, minVORP, maxVORP, p, usaBigRadius * 0.85, manager.circleScatterStrength, true);
 
-            console.log(intValues)
             this.circlesVorpPS = { int: intValues.circles, usa: usaValues.circles };
             this.negativeLines = { int: intValues.negativeLine, usa: usaValues.negativeLine };
 
@@ -159,9 +156,9 @@
             //Draw circles: usa, then international
             for (let circle in this.circlesVorpPS.usa) {
                 let playerCircle = this.circlesVorpPS.usa[circle];
-                let newX = p.map(p.constrain(progress, 0.5, 0.62), 0.5, 0.62, manager.circlesPS.usa[playerCircle.name].x, playerCircle.x);
-                let newY = p.map(p.constrain(progress, 0.5, 0.62), 0.5, 0.62, manager.circlesPS.usa[playerCircle.name].y, playerCircle.y);
-                let newR = p.map(p.constrain(progress, 0.5, 0.62), 0.5, 0.62, manager.circlesPS.usa[playerCircle.name].r, playerCircle.r);
+                let newX = p.map(p.constrain(progress, 0.5, 0.55), 0.5, 0.55, manager.circlesPS.usa[playerCircle.name].x, playerCircle.x);
+                let newY = p.map(p.constrain(progress, 0.5, 0.55), 0.5, 0.55, manager.circlesPS.usa[playerCircle.name].y, playerCircle.y);
+                let newR = p.map(p.constrain(progress, 0.5, 0.55), 0.5, 0.55, manager.circlesPS.usa[playerCircle.name].r, playerCircle.r);
                 playerCircle = { ...playerCircle, x: newX, y: newY, r: newR };
 
                 VizAllPlayers.drawCircle(playerCircle, p, manager.flagImages);
@@ -172,9 +169,9 @@
             }
             for (let circle in this.circlesVorpPS.int) {
                 let playerCircle = this.circlesVorpPS.int[circle];
-                let newX = p.map(p.constrain(progress, 0.5, 0.62), 0.5, 0.62, manager.circlesPS.int[playerCircle.name].x, playerCircle.x);
-                let newY = p.map(p.constrain(progress, 0.5, 0.62), 0.5, 0.62, manager.circlesPS.int[playerCircle.name].y, playerCircle.y);
-                let newR = p.map(p.constrain(progress, 0.5, 0.62), 0.5, 0.62, manager.circlesPS.int[playerCircle.name].r, playerCircle.r);
+                let newX = p.map(p.constrain(progress, 0.5, 0.55), 0.5, 0.55, manager.circlesPS.int[playerCircle.name].x, playerCircle.x);
+                let newY = p.map(p.constrain(progress, 0.5, 0.55), 0.5, 0.55, manager.circlesPS.int[playerCircle.name].y, playerCircle.y);
+                let newR = p.map(p.constrain(progress, 0.5, 0.55), 0.5, 0.55, manager.circlesPS.int[playerCircle.name].r, playerCircle.r);
                 playerCircle = { ...playerCircle, x: newX, y: newY, r: newR };
 
                 VizAllPlayers.drawCircle(playerCircle, p, manager.flagImages);
@@ -207,7 +204,7 @@
                 }
             }
 
-            let transparency = p.map(p.constrain(progress, 0.5, 0.62), 0.5, 0.62, 0, 255);
+            let transparency = p.map(p.constrain(progress, 0.5, 0.55), 0.5, 0.55, 0, 255);
             p.strokeWeight(5);
             p.stroke(211, 211, 211, transparency);
             if (this.negativeLines.usa !== null) {
@@ -248,8 +245,8 @@
             // original text location
             let ogX1 = midX + 115 - 65;
             let ogY1 = midY + 235 - 20;
-            let newX = p.map(p.constrain(progress, 0.5, 0.62), 0.5, 0.62, ogX1, midX + 155 - 65);
-            let newY = p.map(p.constrain(progress, 0.5, 0.62), 0.5, 0.62, ogY1, midY + 180);
+            let newX = p.map(p.constrain(progress, 0.5, 0.55), 0.5, 0.55, ogX1, midX + 155 - 65);
+            let newY = p.map(p.constrain(progress, 0.5, 0.55), 0.5, 0.55, ogY1, midY + 180);
             p.text("249.8 total positive VORP", newX, newY, 130, 50);
 
             //-44.6
@@ -257,8 +254,8 @@
 
             let ogX2 = midX - 200 - 65;
             let ogY2 = midY + 145 - 20;
-            newX = p.map(p.constrain(progress, 0.5, 0.62), 0.5, 0.62, ogX2, midX - 155 - 65);
-            newY = p.map(p.constrain(progress, 0.5, 0.62), 0.5, 0.62, ogY2, midY + 180);
+            newX = p.map(p.constrain(progress, 0.5, 0.55), 0.5, 0.55, ogX2, midX - 155 - 65);
+            newY = p.map(p.constrain(progress, 0.5, 0.55), 0.5, 0.55, ogY2, midY + 180);
             p.text("107.6 total positive VORP", newX, newY, 130, 50);
 
             p.textWrap(p.WORD);

@@ -203,7 +203,7 @@
             p.textAlign(p.LEFT, p.BASELINE);
         },
 
-        drawHeader: function(p, season, manager, maxPlayers) {
+        drawHeader: function(p, season, manager, maxPlayers, maxVORP) {
             p.noStroke();
             p.fill('black');
             p.textSize(20);
@@ -212,7 +212,8 @@
             p.text('NBA Season ' + season, manager.offsetX, manager.offsetY + 35);
             p.textSize(18);
             p.textStyle(p.NORMAL);
-            p.text('Total Players: ' + maxPlayers, manager.offsetX, manager.offsetY + 57);
+            if(maxVORP === undefined) p.text('Total Players: ' + maxPlayers, manager.offsetX, manager.offsetY + 57);
+            else p.text('Total VORP: ' + maxVORP, manager.offsetX, manager.offsetY + 57);
         }
     };
 

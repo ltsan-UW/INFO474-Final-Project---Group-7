@@ -22,11 +22,11 @@
             function createCluster(centerX, centerY, prevCircles, minVORP, maxVORP, p, bigRadius, scatterStrength, seperateNegatives) {
                 let newCircles = {};
                 let negativeLine = null;
-                let negGap = 50;
+                let negGap = 70;
 
                 let maxY = bigRadius * 2;
                 let count = 0;
-                let yCurrDistance = -bigRadius + 10;
+                let yCurrDistance = -bigRadius + 13;
                 let rowCount = 1;
                 while (count < prevCircles.length && yCurrDistance < maxY) {
                     let maxR = Math.sqrt(bigRadius * bigRadius - yCurrDistance * yCurrDistance);
@@ -44,7 +44,7 @@
                         let x = -maxR + xCurrDistance + (Math.random() * gap * 2 - gap);
                         let newX = (rowCount % 2 == 1) ? centerX + x : centerX - x;
                         if (seperateNegatives && negativeLine == null && currCircle.VORP <= 0) {
-                            negativeLine = { x: centerX - maxR, y: newY + negGap / 2, x2: centerX + maxR };
+                            negativeLine = { x: centerX - maxR, y: newY + negGap / 2 - 10, x2: centerX + maxR };
                         }
                         newCircles[currCircle.name] = {
                             x: newX,
@@ -128,8 +128,8 @@
             const usaBigRadius = Math.sqrt(usaMappedTotalVORP / 2 / Math.PI);
             // let intValues = createCluster(midX / 2, midY, r, spacing, intPrevCircles, minVORP, maxVORP, p, Math.sqrt(intTotalVORP / 2 / Math.PI));
             // let usaValues = createCluster(midX / 4 * 5.5, midY, r, spacing, usaPrevCircles, minVORP, maxVORP, p, Math.sqrt(usaTotalVORP / 2 / Math.PI));
-            let intValues = createCluster(midX - usaBigRadius * 0.9 - 15, midY - 8.5 - 20, intPrevCircles, minVORP, maxVORP, p, usaBigRadius * 0.85, manager.circleScatterStrength, true);
-            let usaValues = createCluster(midX + usaBigRadius * 0.9 + 15, midY - 20, usaPrevCircles, minVORP, maxVORP, p, usaBigRadius * 0.85, manager.circleScatterStrength, true);
+            let intValues = createCluster(midX - usaBigRadius * 0.9 - 15, midY - 30, intPrevCircles, minVORP, maxVORP, p, usaBigRadius * 0.75, manager.circleScatterStrength, true);
+            let usaValues = createCluster(midX + usaBigRadius * 0.9 + 15, midY - 30, usaPrevCircles, minVORP, maxVORP, p, usaBigRadius * 0.8, manager.circleScatterStrength, true);
 
             this.circlesVorpPS = { int: intValues.circles, usa: usaValues.circles };
             this.negativeLines = { int: intValues.negativeLine, usa: usaValues.negativeLine };
@@ -144,7 +144,7 @@
 
             p.noFill();
 
-            VizAllPlayers.drawHeader(p, manager.currentSeason, manager, this.maxPlayers);
+            VizAllPlayers.drawHeader(p, manager.currentSeason, manager, this.maxPlayers, 300);
 
             p.strokeWeight(1);
             p.stroke('grey')
@@ -209,11 +209,11 @@
             p.stroke(211, 211, 211, transparency);
             if (this.negativeLines.usa !== null) {
                 let usaLine = this.negativeLines.usa;
-                dashedLine(p, usaLine.x, usaLine.y, usaLine.x2, usaLine.y, 5, 10);
+                dashedLine(p, usaLine.x + 10, usaLine.y, usaLine.x2 - 10, usaLine.y, 5, 10);
             }
             if (this.negativeLines.int !== null) {
                 let intLine = this.negativeLines.int;
-                dashedLine(p, intLine.x, intLine.y, intLine.x2, intLine.y, 5, 10);
+                dashedLine(p, intLine.x + 10, intLine.y, intLine.x2 - 10, intLine.y, 5, 10);
                 p.strokeWeight(0);
                 p.fill(150, 150, 150, transparency);
                 p.textSize(10);
@@ -239,15 +239,15 @@
 
             p.textAlign(p.CENTER, p.CENTER);
             p.textWrap(p.WORD);
-            p.fill(150, 150, 150);
-            p.textSize(16);
+            p.textSize(p.map(p.constrain(progress, 0.5, 0.55), 0.5, 0.55, 16, 17.5));
+            p.fill('grey')
 
             // original text location
             let ogX1 = midX + 115 - 65;
             let ogY1 = midY + 235 - 20;
             let newX = p.map(p.constrain(progress, 0.5, 0.55), 0.5, 0.55, ogX1, midX + 155 - 65);
-            let newY = p.map(p.constrain(progress, 0.5, 0.55), 0.5, 0.55, ogY1, midY + 180);
-            p.text("249.8 total positive VORP", newX, newY, 130, 50);
+            let newY = p.map(p.constrain(progress, 0.5, 0.55), 0.5, 0.55, ogY1, midY + 155);
+            p.text("205 total VORP", newX, newY, 130, 50);
 
             //-44.6
             //-12.9
@@ -255,14 +255,16 @@
             let ogX2 = midX - 200 - 65;
             let ogY2 = midY + 145 - 20;
             newX = p.map(p.constrain(progress, 0.5, 0.55), 0.5, 0.55, ogX2, midX - 155 - 65);
-            newY = p.map(p.constrain(progress, 0.5, 0.55), 0.5, 0.55, ogY2, midY + 180);
-            p.text("107.6 total positive VORP", newX, newY, 130, 50);
+            newY = p.map(p.constrain(progress, 0.5, 0.55), 0.5, 0.55, ogY2, midY + 155);
+            p.text("95 total VORP", newX, newY, 130, 50);
 
             p.textWrap(p.WORD);
-            p.fill(150, 150, 150, transparency);
+            p.fill(160, 160, 160, transparency);
             p.textSize(10);
-            p.text("-44.6 total negative VORP", midX + 155, midY - 120);
-            p.text("-12.9 total negative VORP", midX - 155, midY - 45);
+            p.text("-13 VORP", midX - 155, midY - 65);
+            p.text("-45 VORP", midX + 155, midY - 140);
+            p.text("+108 VORP", midX - 155, this.negativeLines.int.y + 28);
+            p.text("+250 VORP", midX + 155,  this.negativeLines.usa.y + 28);
             p.textAlign(p.LEFT, p.BASELINE);
 
             p.noStroke();
